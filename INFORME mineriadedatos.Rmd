@@ -1,0 +1,541 @@
+---
+title: "Trabajo de Investigación - Mineria de Datos"
+author: "Elaborado por: Diego Gomez"
+date: "Junio, 2024"
+output:
+  pdf_document :
+    toc: true
+    number_sections: true  
+  html_document:
+    toc: true
+    number_sections: true  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+library(dplyr)
+library(tidyverse)
+```
+
+<<<<<<< HEAD
+```{r, echo=FALSE, out.width='100%', fig.align='center'}
+#include_graphics("./logo_umsa2.png")
+
+#\newpage
+```
+
+=======
+>>>>>>> 0595552014b9cc172ddac92e999e5e933bedc64f
+\newpage
+# Introducción
+
+El seguro es el instrumento a través del cual las empresas o personas transfieren riesgos a un tercero, empresa aseguradora, y en caso de siniestro tienen la obligación de indemnizar total o parcialmente sus pérdidas, dependiendo del contexto.
+
+Las entidades aseguradoras otorgan cobertura a riesgos que podrían afectar a bienes, patrimonio o a individuos. Como contraprestación de ello requieren del pago de un monto (prima) y en el caso que suceda un determinado evento que ocasione una pérdida (siniestro) la aseguradora pagará el monto acordado (indemnización), cuyo riesgo de ocurrencia es objeto de cobertura por el seguro. La actividad del mercado inicia con la necesidad que se crea de los clientes a partir de la percepción de un riesgo y para el cual contrata la póliza de seguro de una compañía.
+
+Durante el año 2021, el mercado asegurador boliviano experimentó un desempeño interesante. Aunque las primas directas se mantuvieron casi al mismo nivel que en 2020, hubo un aumento significativo en los pagos por siniestros, superando en más del 55% los montos del año anterior. Esto tuvo un fuerte impacto en el índice de siniestralidad anual, que alcanzó un récord histórico del 80%. Sin embargo, en 2022, se observó una notable disminución, llegando al 53%.
+
+Sin duda, la pandemia ha puesto de manifiesto la importancia crucial de los seguros en nuestra sociedad. Su función fundamental es preservar la integridad de las personas y proteger su patrimonio, especialmente en áreas afectadas por la crisis, como la salud, la vida y el desempleo. La necesidad de reducir la exposición al riesgo se ha vuelto más evidente que nunca, y esto podría beneficiar a largo plazo el modelo de negocio de las compañías de seguros y contribuir a su desarrollo.
+
+Al respecto, el Grupo Financiero Patito S.A. observando el mercado potencial, determinó incursionar en la comercialización de seguros a través del Banco Patito S.A. en la modalidad de Seguros de Personas y Generales.
+
+# Objetivos
+
+## Objetivo General
+
+- Identificar los patrones de comportamientos mediante el análisis de k-medias de los clientes con créditos de seguros del Banco Patito.
+
+## Objetivos Específicos
+- Relizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
+- Relizar el análisis de componentes a las variables numéricas.
+- Determinar el número óptimo de clusters para la base de datos.
+- Crear un dashboard que presente de manera clara y visual los clusters identificados.
+
+# Motivación
+Banco Patito S.A., al contar con una cantidad importante de clientes con canales de alto impacto, pretende conocer el comportamiento de los clientes para poder incrementar los ingresos por la comercialización de seguros. 
+
+Se advierte que el volumen de la cartera del Banco Patito S.A, créditos PYME, microcréditos, vivienda y consumo dirigido a personas naturales con cobertura del seguro, tuvo crecimiento en las gestiones 2017-2020 y una reducción al cierre de 2021 como resultado de la contracción económica debido a la pandemia, ya que en esta etapa se otorgó el diferimiento y reprogramación de créditos, pero para la gestión 2022 se observa una recuperación de la cartera en riesgo con un crecimiento menor en valor absoluto de la gestión 2020.
+
+La cartera susceptible del seguro está conformada por créditos PYMES, Microcréditos, Hipotecarios, Productivos y de Consumo, los cuales de manera individual han tenido un crecimiento continuo, situación favorable para el desarrollo de nuevos productos de seguros adicionales tomando en cuenta el potencial de la cartera.
+
+Las personas naturales que tienen créditos representan un grupo susceptible para la venta de seguros. Cuando alguien adquiere un préstamo, su interés en proteger su inversión y su capacidad de pago aumenta. Por lo tanto, existe una oportunidad para ofrecerles productos de seguros que cubran riesgos como enfermedades, accidentes o pérdida de empleo.
+
+Además debemos considerar que la cartera de seguros ya está constituida, lo que significa que hay una base de clientes potenciales. A medida que aumenta la colocación de créditos, también se incrementa la demanda de seguros. Esto se debe a que las personas buscan proteger sus activos y garantizar la continuidad de sus compromisos financieros en caso de imprevistos.
+
+En el entorno actual, la gestión efectiva de metas e indicadores es fundamental para el éxito en la industria financiera y aseguradora. Desarrollar un dashboard específico para la entidad financiera permitirá visualizar y analizar de manera eficiente los datos clave relacionados con la comercialización de seguros. Esto facilitará la toma de decisiones informadas y la identificación de áreas de mejora.
+
+Se ha observado que los clientes de seguros son variables cada mes por lo que se pretende mantener una tasa de crecimiento constante de acuerdo con las características de los tipos de clientes y a qué tipo de créditos aplican para evaluar en siguientes periodos los tipos de seguros a comercializar por canal, tipo de crédito y cliente. En ese sentido, se pretende generar un dashboard para otorgar la información oportunamente al área ejecutiva para la toma de decisiones entre el banco y aseguradora con acceso para los principales ejecutivos del área comercial.
+
+# Marco Teórico
+El seguimiento de ventas y la concentración de ingresos son elementos cruciales para el éxito de cualquier organización comercial. Este marco teórico explora los fundamentos esenciales de estos conceptos y cómo su comprensión y aplicación pueden contribuir a una gestión empresarial efectiva.
+
+Seguimiento de Ventas
+
+El seguimiento de ventas implica el monitoreo sistemático de todas las actividades relacionadas con el proceso de ventas de seguros. Desde la generación de leads hasta el cierre de negocios, cada etapa se analiza para evaluar el rendimiento y mejorar la eficacia de las estrategias de ventas.
+
+-	Optimización del Proceso: El seguimiento de ventas permite identificar cuellos de botella y optimizar cada etapa del proceso de ventas para mejorar la eficiencia y aumentar la productividad en la venta de seguros.
+-	Toma de Decisiones Basada en Datos: La recopilación y análisis de datos de ventas proporciona información valiosa para la toma de decisiones informada, lo que permite ajustar estrategias según sea necesario.
+-	Mejora Continua: Al comprender el rendimiento histórico, las organizaciones pueden implementar mejoras continuas en sus estrategias y tácticas de ventas.
+
+Concentración de Ingresos
+
+La concentración de ingresos se refiere al grado en que los ingresos del Banco dependen de un pequeño número de clientes, productos o segmentos de mercado. Una alta concentración puede ser riesgosa, ya que la pérdida de un cliente clave podría tener un impacto significativo en los ingresos totales.
+
+-	Diversificación de Clientes: Entender y gestionar la concentración de ingresos motiva a las empresas a diversificar su base de clientes, reduciendo la dependencia de fuentes únicas.
+-	Gestión de Riesgos: La concentración de ingresos puede aumentar la vulnerabilidad ante cambios en el mercado. La gestión proactiva de riesgos es esencial para mitigar posibles impactos adversos.
+-	Planificación Estratégica: Comprender la concentración de ingresos influye en la planificación estratégica. Las organizaciones pueden desarrollar estrategias para reducir riesgos y aprovechar oportunidades de crecimiento.
+
+Importancia de la Gestión de Metas e Indicadores
+
+La gestión de metas e indicadores proporciona una visión integral del rendimiento empresarial. Al establecer y monitorear metas específicas, la entidad financiera puede evaluar su éxito en la comercialización de seguros y ajustar estrategias según sea necesario.
+
+-	Toma de Decisiones Informada: El acceso a indicadores clave a través de un dashboard facilita la toma de decisiones informada. Los líderes de la entidad pueden identificar áreas de mejora, detectar tendencias y anticipar desviaciones en tiempo real, permitiendo una respuesta ágil a las condiciones del mercado.
+-	Indicadores de Rendimiento: El dashboard incluirá indicadores como la tasa de crecimiento de cartera, el cumplimiento de metas de ventas y otros relevantes para la comercialización de seguros.
+-	Desgloses Geográficos y Temporales: La capacidad de desglosar el rendimiento por región, sucursal o periodo temporal proporcionará insights valiosos para entender variaciones y patrones en la comercialización.
+-	Seguridad de Datos y Acceso: Se implementarán medidas de seguridad robustas para garantizar que solo los usuarios autorizados accedan a la información sensible.
+
+# Descripción de la base datos
+
+La base de datos actual proviene de las transacciones de un mes del Banco Patito S.A. respecto a ingresos no financieros (seguros). En la base de datos se cuenta con *41 variables* y 200K registros de evaluación respecto a datos del cliente , del seguro y operación crediticia. Se detalla a continuación las variables más relevantes para la construcción de los indicadores:
+
+- PRODUCTO: Indica el tipo de seguro adquirido del clientes, el mismo puede ser categorizado como Seguros Personales o seguros generales (patrimoniales).
+- DESC_SUCURSAL: Indica el departamento de la sucursal donde se hizo la transacción
+- VALOR_ASEGURADO: Muestra el monto monetario del valor del seguro. 
+- MONEDA: EL tipo de moneda en el que se hizo la transacción esta puede ser bolivianos, dolares, u otro tipo de moneda.
+- TASA_PRIMA_INTERES: La tasa prima de interes, es el porcentaje respecto del valor asegurado que el cliente debe pagar como parte del pago del seguro.
+- FECHA_NACIMIENTO: La fecha en la que nacio el cliente, la variable nos ayudara a obtener la edad en años de los clientes
+- MONTO_DESEMBOLSADO: Es el valor monetario donde el cliente pidio un prestamo y esta pendiente de devolución a la entidad finaciera.
+- OPERACION_CREDITICIA: Es la razón o tipo operación crediticia donde el banco dio un prestamo a un cliente. 
+- ACT_EXO_OCUPACION: El tipo de actividad económica del cliente. 
+
+# Metodología
+
+## Indicadores y Fichas de Indicadores
+
+### Tasa de ingresos por prima promedio por regional
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data2 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Tasa de ingresos por prima promedio por regional"
+               , "INGREG"
+               , "Comparar el volumen de ingresos por departamento respecto a la meta comercial de seguros"
+               ," Realizar la agrupación de ingresos de prima por departamento y comparar respecto a la meta comercial"
+               ," En moneda nacional Bs."
+               ," El volumen de ingresos por prima refiere a lo recaudado por venta de seguros en el banco."
+               ," vol prima por depto / meta de vol prima"
+       ," Prima y departamento"
+," Minimo 1"
+)
+)
+
+kable(data2,format = "pipe", padding = 2)
+
+
+```
+### Pareto de primas de seguros 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data3 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Pareto de primas de seguros"
+               , "INGPROMREG"
+               , "Conocer si el 80% de los ingresos no proviene de los principales 2000 clientes de créditos."
+               ," Se categoriza a los 2000 principales clientes de créditos para conocer su concentración respecto a la cartera de créditos."
+               ," % "
+               ," La concentración de riesgo es relevante para diversificar la cartera de clientes y no tener dependencia."
+               ," % de concentración / 80%"
+       ," "
+," Menor 1"
+)
+)
+
+kable(data3,format = "pipe", padding = 2)
+
+```
+
+### Porcentaje de participación de créditos por regiones
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data4 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("% porcentaje de participación de créditos por regiones"
+               , "%REGCRED"
+               , "Identificar la concentración de ingresos por seguros, según regionales (altiplano, valle y oriente)"
+               ," Agrupar los ingresos de seguros por regional para identificar que no supere el margen establecido"
+               ," % "
+               ," La concentración de ingresos por regional define la proporción de recursos que requiere cada regional así como su concentración."
+               ," % ingresos por regional/% concentración esperada por regional"
+       ," "
+," Max 120% y min 80%"
+)
+)
+
+kable(data4,format = "pipe", padding = 2)
+
+```
+### Tasa promedio de valor asegurado según cartera de créditos
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data5 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Tasa promedio de valor asegurado según cartera de créditos."
+               , "PROMVACRED"
+               , "Identificar el valor promedio de créditos que se tiene por tipo de crédito para identificar mayor concentración de seguros."
+               ," Agrupar por tipo de crédito y calcular el promedio de cada uno para categorizar los créditos."
+               ," En moneda nacional Bs. "
+               ," El valor asegurado por crédito define que tipo de crédito es el que representa menor cantidad de cliente pero mayor volumen de ingresos."
+               ," Máx (valor asegurado según tipo de crédito) "
+       ," "
+," Crédito hipotecario"
+)
+)
+
+kable(data5,format = "pipe", padding = 2)
+
+```
+###  Cuartiles de cantidad de clientes por saldo de crédito
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data6 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Cuartiles de cantidad de clientes por saldo de crédito"
+               , "DISTCANCLIEN"
+               , "Conocer si el 75% de los créditos en cantidad tiene una cantidad similar en voluemn de créditos"
+               ," Calcular los cuartiles de cantidad de clientes para comparar que el tercer cuartil no sea en volumen de créditos mayor al 75%."
+               ," %"
+               ," La concentración de riesgo es relevante para diversificar la cartera de créditos."
+               ," % de concentración / 75% "
+       ," "
+," Menor 1"
+)
+)
+
+kable(data6,format = "pipe", padding = 2)
+
+```
+### Porcentaje de uso de moneda nacional por volumen de crédito y cantidad
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data7 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Porcentaje de uso de moneda nacional por volumen de crédito y cantidad"
+               , "%MONCRED"
+               , "Conocer la concentración en moneda extranjera para identificar riesgos de tipo de cambio"
+               ," Calcular el porcentaje de créditos en moneda nacional y extranjera para verificar su concentración."
+               ," %"
+               ," El riesgo de tipo de cambio ante la fluctuación de falta de dolares"
+               ," vol. Creditos en moneda extranjera / vol créditos total"
+       ," "
+," Menor al 5%"
+)
+)
+
+kable(data7,format = "pipe", padding = 2)
+
+```
+
+
+### Volumen de ingresos por tipo de seguro respecto a la meta
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data8 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Volumen de ingresos por tipo de seguro respecto a la meta "
+               , "INGSEG"
+               , " Comparar el volumen de ingresos por tipo de seguro respecto a la meta comercial de colocación por departamento "
+               ," Realizar la agrupación de ingresos de prima por tipo de seguro y comparar respecto a la meta comercial."
+               ," En moneda nacional Bs."
+               ," El volumen de ingresos por prima refiere a lo recaudado por venta de seguros en el banco por departamento."
+               ," vol prima por tipo d seguro / meta de vol prima"
+       ," Prima y departamento "
+," Minimo 1"
+)
+)
+
+kable(data8,format = "pipe", padding = 2)
+
+```
+###  Perfil de edades según segmento requerido
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data9 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Perfil de edades según segmento requerido"
+               , "PERFEDAD"
+               , " Identificar el tipo de cliente que es cliente del banco respecto a tipo de crédito"
+               ," Calcular la frecuencia por rango de edades para identificar la concentración de cliente por tipo de crédito."
+               ," Edad de clientes por crédito"
+               ," La edad define el tipo de cliente que tiene la entidad financiera para dirigir y definir estrategia comercial."
+               ," Edad promedio por tipo de crédito"
+       ," "
+," Entre 30 y 45 años "
+)
+)
+
+kable(data9,format = "pipe", padding = 2)
+
+```
+### Tasa de interes respecto al monto desembolsado asegurado
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data10 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Tasa de interes respecto al monto desembolsado asegurado"
+               , "TASAMONTO"
+               , "Comparar las diferentes tasas de interes en relación al monto que se desombolsa al cliente"
+               ," Realizar una vista de diagrama de dispersión entre tasa de interes y monto desembolsado"
+               ," Pocentaje y en Milllones de bolivianos"
+               ," El monto desembolsado es la cantidad que recibe un cliente a cambio de una tasa de interes "
+               ," "
+       ," Monto desembolsado, tasa prima interes "
+," "
+)
+)
+
+kable(data10,format = "pipe", padding = 2)
+
+```
+
+### Tasa promedio de prima por tipo de operacion crediticia
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data11 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Tasa promedio de prima por tipo de operacion crediticia"
+               , "AVGPRIMAOPE"
+               , "Comparar la tasa promedio de prima en los diferentes tipos de operación crediticia "
+               ," Calcular el promedio de prima agrupando por tipo de operación crediticia"
+               ," %"
+               ," La operación crediticia se refiere a la razón por la cual se esta haciendo el desembolso a un cliente. "
+               ," Suma de primas de todos los clientes/ numero de desembolsos"
+       ," Operación Crediticia, Prima"
+," "
+)
+)
+
+kable(data11,format = "pipe", padding = 2)
+
+```
+### Actividad economica de los asegurados por edad
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data12 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Actividad economica de los asegurados por edad"
+               , "ACTECOEDAD"
+               , " Identificar las actividades economicas de los clientes y sus diferencias en cuanto a primas y otros"
+               ," Calcular indicadores como la media de edad, mediana de la prima y mediana del valor asegurado por actividad economica"
+               ," Varios"
+               ," La actividad economica se refiere a la acción que realizar los diferentes clientes con el fin de generar ingresos monetarios "
+               ," Media, mediana"
+       ," Actividad economica, edad, prima, valor asegurado"
+," "
+)
+)
+
+kable(data12,format = "pipe", padding = 2)
+
+```
+
+### Tasa de participación en seguros por región y tipo de seguro
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data13 <- data.frame(
+  Campo = c("•	Nombre del Indicador"
+            , "•	Sigla"
+            , "•	Objetivo:"
+            ,"•	Método de medición: "
+            ,"•	Unidad de Medida: "
+            ,"•	Definiciones y conceptos"
+            ,"•	Formula: "
+            ,"•	Variables:"
+            ,"•	Limitaciones del Indicador: "
+            ),
+  Concepto = c("Tasa de participación en seguros por región y tipo de seguro "
+               , " TASAREGIONTIPOSEG "
+               , " Comparar la proporción de clientes en los diferentes tipo de seguro y región "
+               ," Calcular la proporción de clientes que existen por región agrupado por tipo de seguro "
+               ," %"
+               ," La región nos indica el área geografica de Bolivia dividida en altiplano, oriente, valle "
+               ," numero de clientes en cada región dividido entre el total de clientes en cartera, agrupado por tipo de seguro."
+       ," Tipo de seguro, región"
+," "
+)
+)
+
+kable(data13,format = "pipe", padding = 2)
+
+```
+
+
+
+## Tratamiento sobre la base datos 
+Para el presente conjunto de datos se cuido que las diferentes variables correpondan a un tipo de dato diferente según su naturaleza, como ser variables categóricas, numericas y otras. 
+Por otro lado, respecto a los datos faltantes, se observo que son una cantidad muy pequeña respecto del total, asi se decidio omitirlas. Posteriormente, el tratamiento de las diferentes variables se vio directamente para la construcción de cada indicador, y previamente creando algunas variables como la región en base al departamento de origen de la transacción o la edad de los clientes en base a su fecha de nacimiento. 
+
+## Visualización sobre la información
+
+Visualización por indicador: 
+
+1. Tasa de ingresos por prima promedio por regional: Gráfico de barras
+2. Ingresos total por regional: Graficvo de barras comparación de ingreso real y metas
+3. % porcentaje de participación de créditos por regiones: Grafico de barras horizontal
+4. Tasa promedio de valor asegurado según cartera de créditos: Graífico de puntos 
+5. Cuartiles de valor asegurado por tipo de crédito: boxplot 
+6. Porcentaje de uso de moneda nacional por volumen de crédito y cantidad: Gráfico de torta 
+7. Volumen de ingresos por tipo de seguro respecto a la meta: 
+8. Perfil de edades según segmento requerido: gráfico de densidad
+9. Tasa de interes respecto al monto desembolsado asegurado: Gráfico de dispersión
+10. Tasa promedio de prima por tipo de operacion crediticia: Gráfico de barras
+11. Actividad economica de los asegurados por edad: Tabla con indicadores
+12. Tasa de participación en seguros por región y tipo de seguro: Gráfico de barras apiladas.
+
+
+
+## Armado de la Plataforma
+Una vez obtenido los indicadores de la base de datos, los mismos de muestran en un dashboard resumen donde la construcción se la hizo en R, mediante la libreia **flexdashboard**. donde por cada ventana se muestran de 2 a 3 indicadores que muesran el estado actual de la empresa, en cuestión de metas, indicadores que muestran los objetivos economicos como sociales de la empresa. 
+
+
+# Resultados y Análisis
+
+INDICADOR 1: Volumen de ingresos por departamento
+- Las regionales con mayores ingresos son Santa Cruz, La Paz y Cochabamba. Sucre, Beni, Oruro y Potosí y Pando alcanzaron la meta de ingresos por Seguros para dicho periodo.
+- La meta a nivel nacional fue alcanzada en un 100% pese a los resultados del eje troncal.
+
+INDICADOR 2: Concentración de volumen de créditos
+Se resalta un alto riesgo en 20% de los principales clientes dado que representan un 69% de la cartera de ingreso por seguros.
+
+INDICADOR 3: Se identifica que existe un equilibrio entre las regiones respecto a los resultados por ingresos, por lo que se cumple la meta requerida.
+
+INDICADOR 4: Respecto a la evaluación de concentración por tipo de crédito se observa que se cumple lo requerido respecto a que los créditos PYME e Hipotecarios sean aquellos que tienen un límite promedio de Bs250.000
+
+INDICADOR 5: Respecto a cada tipo de crédito se debe evaluar que el 75% de los créditos supere el máximo permitido en valor asegurado, identificando a 5 de los 18 tipo de créditos con incumplimiento.
+
+INDICADOR 6: Debido al riesgo de tipo de cambio, el Banco pretende tener como máximo límite un 98% de las operaciones en moneda nacional, por lo que actualmente cumple con lo requerido para reducir el impacto de falta de dolares o devaluación de moneda.
+ 
+INDICADOR 7:Respecto a las metas de ingresos por regionales se obtuvo el total de ingresos a una fecha corte donde se pudo evidenciarf que las regionales con cartera mas amplia, aun no cumplieron sus metas definidas, esto a razón que sus metas son mas amplias por el número de clientes afiliados
+
+INDICADOR 8: El tipo de seguros Personas tiene un promedio de edad 5 años por debajo del promedio de edad del tipo de seguros generales, lo que nos sugiere que las personas de mayor edad cuentan con seguros generales(seguros de bienes, etc) por contar con un mayor capital de trabajo.
+
+INDICADOR 9: Se puedo observar que según reglas de la empresa hay algunos acuerdos que no cumplieron con las tasas especificadas lo cual podria tener observaciones por el regulador. En general se puedde observar que a mayor valor asegurado, la tasa prima del seguro es menor. 
+
+
+
+# Conclusiones
+
+El desarrollo de un dashboard para la gestión de seguimiento de metas e indicadores en la comercialización de seguros ofrecerá a la entidad financiera una herramienta valiosa para optimizar su rendimiento comercial y adaptarse de manera ágil a un entorno dinámico. La implementación exitosa de este proyecto requerirá una comprensión profunda de las necesidades comerciales específicas y un enfoque integral en el diseño, implementación y mejora continua del dashboard.
+
+La implementación del dashboard para el seguimiento de metas e indicadores en la comercialización de seguros proporciona a la entidad financiera una herramienta poderosa para la toma de decisiones informada. La visualización clara y en tiempo real de los datos clave facilita la identificación de tendencias, la evaluación del rendimiento y la respuesta ágil a cambios en el entorno comercial.
+
+El dashboard contribuirá significativamente a mejorar la eficiencia operativa al proporcionar un acceso rápido y fácil a la información esencial.
+
+La capacidad de personalizar la visualización de datos permite a los usuarios adaptar el dashboard a sus necesidades específicas.
+
+La visualización clara de metas e indicadores ha facilitado la identificación temprana de oportunidades de crecimiento y desafíos potenciales.
+
+# Recomendaciones
+
+Se recomienda la implementación de programas de capacitación continua para los usuarios del dashboard. Esto garantizará que estén al tanto de las funciones más recientes, optimizando así su capacidad para aprovechar todas las capacidades de la herramienta.
+
+A medida que evolucionan los objetivos comerciales y las estrategias, se recomienda la evaluación regular de la inclusión de nuevos indicadores relevantes en el dashboard. Esto garantizará que la herramienta siga siendo relevante y alineada con los objetivos comerciales cambiantes.
+
+Dada la naturaleza sensible de los datos comerciales, se recomienda una revisión continua de las medidas de seguridad implementadas para garantizar la protección y privacidad de la información.
+
+Establecer un sistema formal de retroalimentación de usuarios para recopilar comentarios y sugerencias. Esto permitirá realizar ajustes y mejoras en el dashboard en respuesta directa a las necesidades y experiencias de los usuarios.
+
+# Referencias
+
+https://www.asfi.gob.bo/images/ASFI/DOCS/SALA_DE_PRENSA/Notas_de_prensa/2022/SEPARATA_BOLIVIA_2022.pdf 
