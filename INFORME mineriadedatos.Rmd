@@ -491,6 +491,94 @@ Una vez obtenido los indicadores de la base de datos, los mismos de muestran en 
 
 # Resultados y Análisis
 
+## Preparación
+
+La base de datos de clientes de créditos y seguros cuenta con 211494 observaciones y 42 variables por lo que se realizó la preparación con la transformación de variables inicialmente para la creación de nuevas variables como ser los días de cobertura del seguro (aplicando diferencia entre las fechas de inicio y fin de cobertura), asimismo, la edad se calculó a partir de la fecha de nacimiento y se realizó la conversión a variable numérica para proceder a aplicar la categorización por rangos de edades con la creación de una nueva variable.
+
+##Selección de variables
+
+Posterior se realizó la selección de 18 variables que son relevantes para la información de los clientes, siendo que se tiene información de transacciones o garantías que no son relevantes para el objeto del estudio. Sin embargo, se crea una nueva base de datos solo con 18 variables de las 45 que se tenía, con la transformación al tipo de variable que corresponde cada atributo de la base de datos, ya sea char, num o factor.
+
+## Datos incompletos
+
+ Se hizo la evaluación de la base de datos para identificar datos incompletos y realizar su tratamiento, por lo que se muestra la matriz de patrones de datos faltantes y la frecuencia de cada patrón.
+
+La primera columna de la tabla indica el número de filas que tienen un patrón específico de datos faltantes: 
+
+- 211357 filas no tienen datos faltantes en ninguna variable (1 indica que el dato está presente).
+- 134 filas tienen un patrón idéntico de presencia y ausencia de datos.
+- 2 filas tienen otro patrón de presencia y ausencia de datos.
+- 1 fila tiene otro patrón distinto de presencia y ausencia de datos.
+
+Las filas de la matriz indican si los datos están presentes (1) o faltan (0) para cada variable. La última fila indica cuántos valores faltantes hay para cada variable:
+- 135 valores faltan en la variable edad.
+- 135 valores faltan en la variable rango de edad.
+- 276 valores faltan en la variable días de cobertura.
+
+La proporción de valores presentes en cada variable, valores cercanos a 1 indican que casi todos los datos están presentes.
++ influx: Proporción de valores faltantes para cada variable en relación con el total de valores faltantes.
++ Variables como PRIMA, CREDITO, diascred, edad, gedad, y diascob tienen valores muy bajos de influx, indicando que los valores faltantes en estas variables constituyen una pequeña fracción del total.
++ outflux: Proporción de datos presentes en una variable que coinciden con datos faltantes en otras variables. La mayoría de las variables tienen un outflux de 1, lo que indica que los datos presentes en estas variables coinciden con los datos presentes en otras variables.
+La mayoría de las variables tienen muy pocos o ningún valor faltante.
+Algunas variables, como edad y gedad, tienen un número ligeramente mayor de valores faltantes.
+El influx y outflux indican que los valores faltantes están dispersos entre las observaciones y no se concentran en una sola variable.
+El análisis sugiere que la base de datos es bastante completa, con algunas variables que tienen un pequeño número de valores faltantes. Los patrones de datos faltantes parecen ser dispersos, sin concentrarse en una sola variable, por lo que se aplicará el método listwise con variables que sean con datos completos.
+Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes (se observaron 137 casos 0.06%)
+
+## Análisis de componentes principales
+
+Para identificar los principales componentes de la base de datos de clientes con créditos se realizó el análisis, con el gráfico de matriz de correlaciones visualizada mediante un "correlograma". Se muestra la relación entre las variables numéricas de la base de datos.
+
+Las variables numéricas consideradas en la matriz de correlación son: SALDO, PRIMA, CREDITO, diascred, edad, y diascob. 
+El color de las celdas varía desde el azul oscuro (correlación positiva alta) hasta el rojo oscuro (correlación negativa alta).
+Azul oscuro indica una correlación positiva cercana a 1.
+Rojo oscuro indica una correlación negativa cercana a -1.
+Colores más claros indican correlaciones más cercanas a 0.
+Tamaño: El tamaño de los círculos también indica la magnitud de la correlación.
+Círculos más grandes indican una correlación más fuerte (positiva o negativa).
+Círculos más pequeños indican una correlación más débil.
+SALDO: Tiene una correlación positiva fuerte con PRIMA y CREDITO.
+PRIMA: Además de la fuerte correlación con SALDO, también muestra una correlación positiva notable con CREDITO.
+CREDITO: Correlaciona fuertemente con diascred.
+diascred: Tiene una fuerte correlación positiva con CREDITO.
+edad: Muestra correlaciones más débiles con las otras variables.
+diascob: Correlaciona fuertemente con diascred.
+Correlaciones Positivas Fuertes:
+- SALDO y PRIMA
+- SALDO y CREDITO
+- PRIMA y CREDITO
+- CREDITO y diascred
+- diascred y diascob
+
+Correlaciones Débiles o Inexistentes:
+- Edad con otras variables muestra correlaciones débiles o casi inexistentes.
+La matriz de correlaciones nos indica que hay fuertes relaciones entre algunas de las variables financieras como SALDO, PRIMA, y CREDITO, así como entre CREDITO, diascred y diascob.
+Las correlaciones débiles de edad sugieren que la edad no tiene una relación fuerte con las demás variables en el conjunto de datos.
+Se procedió al análisis de componentes principales PCA sobre la matriz de correlaciones. La interpretación de los resultados implica descomponer la matriz de correlaciones y reconstruirla usando un subconjunto de los componentes principales.
+
+El gráfico muestra los valores propios (eigenvalues) de la matriz de correlaciones en orden descendente. Este tipo de gráfico colabora a determinar el número de componentes principales a retener, por lo que se podría considerar aquellos valores superiores o iguales a 1, considerando los primeros tres componentes.
+
+Los valores propios (m1$values) y la proporción de varianza explicada por cada componente principal se presentan como sigue:
+
+Primer componente principal: Explica el 42.37% de la varianza total.
+Segundo componente principal: Explica el 19.10% de la varianza total.
+Tercer componente principal: Explica el 16.47% de la varianza total.
+Cuarto componente principal: Explica el 12.06% de la varianza total.
+Quinto componente principal: Explica el 6.21% de la varianza total.
+Sexto componente principal: Explica el 3.79% de la varianza total.
+La varianza acumulada se calcula para determinar cuántos componentes principales son necesarios para explicar un cierto porcentaje de la varianza total:
+Primer componente principal: Explica el 42.37% de la varianza acumulada.
+Primeros dos componentes principales: Explican el 61.47% de la varianza acumulada.
+Primeros tres componentes principales: Explican el 77.94% de la varianza acumulada.
+Primeros cuatro componentes principales: Explican el 90.00% de la varianza acumulada.
+Primeros cinco componentes principales: Explican el 96.21% de la varianza acumulada.
+Todos los componentes principales: Explican el 100% de la varianza acumulada.
+La decisión sobre cuántos componentes principales retener puede basarse en el porcentaje de varianza acumulada. Un criterio común es retener suficientes componentes para explicar al menos el 70-90% de la varianza total.
+En este caso, los primeros tres componentes principales explican el 78.00% de la varianza acumulada, lo cual suele considerarse suficiente para la mayoría de los análisis.
+En el gráfico muestra un claro "codo" (punto de inflexión) después del primer componente principal, con una disminución más gradual en los valores propios después del tercer componente principal. Esto sugiere que los primeros tres componentes capturan la mayor parte de la información relevante en los datos.
+
+
+
 INDICADOR 1: Volumen de ingresos por departamento
 - Las regionales con mayores ingresos son Santa Cruz, La Paz y Cochabamba. Sucre, Beni, Oruro y Potosí y Pando alcanzaron la meta de ingresos por Seguros para dicho periodo.
 - La meta a nivel nacional fue alcanzada en un 100% pese a los resultados del eje troncal.
