@@ -1,6 +1,6 @@
 ---
 title: "Trabajo de Investigación - Mineria de Datos"
-author: "Elaborado por: Diego Gomez"
+author: "Elaborado por: Diego Gomez, Ana Rodrigo"
 date: "Junio, 2024"
 output:
   pdf_document :
@@ -20,18 +20,25 @@ knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 library(dplyr)
 library(tidyverse)
+library(mice)
+library(corrplot)
+
+load("_data/BDO_A.RData")
+load("_data/BD.RData")
+
+
 ```
 
-<<<<<<< HEAD
+
 ```{r, echo=FALSE, out.width='100%', fig.align='center'}
-#include_graphics("./logo_umsa2.png")
+include_graphics("_fig/logo_umsa2.png")
 
-#\newpage
 ```
 
-=======
->>>>>>> 0595552014b9cc172ddac92e999e5e933bedc64f
+
 \newpage
+
+
 # Introducción
 
 El seguro es el instrumento a través del cual las empresas o personas transfieren riesgos a un tercero, empresa aseguradora, y en caso de siniestro tienen la obligación de indemnizar total o parcialmente sus pérdidas, dependiendo del contexto.
@@ -493,16 +500,24 @@ Una vez obtenido los indicadores de la base de datos, los mismos de muestran en 
 
 ## Preparación
 
-La base de datos de clientes de créditos y seguros cuenta con 211494 observaciones y 42 variables por lo que se realizó la preparación con la transformación de variables inicialmente para la creación de nuevas variables como ser los días de cobertura del seguro (aplicando diferencia entre las fechas de inicio y fin de cobertura), asimismo, la edad se calculó a partir de la fecha de nacimiento y se realizó la conversión a variable numérica para proceder a aplicar la categorización por rangos de edades con la creación de una nueva variable.
+La base de datos de clientes de créditos y seguros cuenta con 211494 observaciones y 42 variables por lo que se realizó la preparación con la transformación de variables inicialmente para la creación de nuevas variables como ser los días de cobertura del seguro (aplicando diferencia entre las fechas de inicio y fin de cobertura), asimismo, la edad se calculó a partir de la fecha de nacimiento y se realizó la conversión a variable numérica para proceder a aplicar la categorización por rangos de edades con la creación de una nueva
+
 
 ##Selección de variables
 
 Posterior se realizó la selección de 18 variables que son relevantes para la información de los clientes, siendo que se tiene información de transacciones o garantías que no son relevantes para el objeto del estudio. Sin embargo, se crea una nueva base de datos solo con 18 variables de las 45 que se tenía, con la transformación al tipo de variable que corresponde cada atributo de la base de datos, ya sea char, num o factor.
 
+
 ## Datos incompletos
 
  Se hizo la evaluación de la base de datos para identificar datos incompletos y realizar su tratamiento, por lo que se muestra la matriz de patrones de datos faltantes y la frecuencia de cada patrón.
+ 
+ variable.
 
+```{r}
+md.pattern(BD, plot = T)
+```
+ 
 La primera columna de la tabla indica el número de filas que tienen un patrón específico de datos faltantes: 
 
 - 211357 filas no tienen datos faltantes en ninguna variable (1 indica que el dato está presente).
@@ -514,6 +529,10 @@ Las filas de la matriz indican si los datos están presentes (1) o faltan (0) pa
 - 135 valores faltan en la variable edad.
 - 135 valores faltan en la variable rango de edad.
 - 276 valores faltan en la variable días de cobertura.
+
+```{r}
+kable(flux(BD))
+```
 
 La proporción de valores presentes en cada variable, valores cercanos a 1 indican que casi todos los datos están presentes.
 + influx: Proporción de valores faltantes para cada variable en relación con el total de valores faltantes.
@@ -528,6 +547,12 @@ Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes
 ## Análisis de componentes principales
 
 Para identificar los principales componentes de la base de datos de clientes con créditos se realizó el análisis, con el gráfico de matriz de correlaciones visualizada mediante un "correlograma". Se muestra la relación entre las variables numéricas de la base de datos.
+
+```{r}
+mcor <- BDO_A %>% select(where(is.numeric)) %>% cor()
+corrplot(mcor)
+```
+
 
 Las variables numéricas consideradas en la matriz de correlación son: SALDO, PRIMA, CREDITO, diascred, edad, y diascob. 
 El color de las celdas varía desde el azul oscuro (correlación positiva alta) hasta el rojo oscuro (correlación negativa alta).
