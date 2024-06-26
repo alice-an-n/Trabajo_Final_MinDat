@@ -253,31 +253,63 @@ La decisión sobre cuántos componentes principales retener puede basarse en el 
 En este caso, los primeros tres componentes principales explican el 78.00% de la varianza acumulada, lo cual suele considerarse suficiente para la mayoría de los análisis.
 En el gráfico muestra un claro "codo" (punto de inflexión) después del primer componente principal, con una disminución más gradual en los valores propios después del tercer componente principal. Esto sugiere que los primeros tres componentes capturan la mayor parte de la información relevante en los datos.
 
+CLUSTER
 
+Se presentan los resultados de los análisis de clustering k-means aplicados a las variables numéricas de la base de datos utilizando 3 y 2 clusters, respectivamente.
 
+Con 3 Clusters
+```{r}
+BD_num <- BDO_A %>% select_if(is.numeric)
+BDOS<-scale(BD_num)
+set.seed(1245)#controlar la aleatoriedad
+n1<-kmeans(BDOS,3)# comando de origen
+fviz_cluster(n1, data=BDOS)
+```
+1.	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 38.4% y 21.3% de la variabilidad total, respectivamente.
+2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión bastante amplia a lo largo de Dim1 y Dim2.
+3.	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico.
+4.	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
+5.	Se observa una cierta superposición entre los clusters 1 y 2, mientras que el Cluster 3 está más separado y bien definido.
+6.	El Cluster 1 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
+
+Con 2 Clusters
+
+```{r}
+BD_num <- BDO_A %>% select_if(is.numeric)
+BDOS<-scale(BD_num)
+set.seed(1245)#controlar la aleatoriedad
+n2<-kmeans(BDOS,2)# comando de origen
+fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
+```
+1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
+2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster abarca la mayor parte del gráfico, similar al Cluster 1 del análisis con 3 clusters.
+3.	Cluster 2 (Cian): Los puntos cian representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado y ubicado principalmente en la parte derecha del gráfico.
+4.	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 1 es más amplio, mientras que el Cluster 2 es más compacto.
+5.	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
+
+Comparación 
+1.	El análisis con 3 clusters muestra una mayor segmentación, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
+2.	En el análisis con 3 clusters, hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
+3.	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
+4.	Para una segmentación de clientes más detallada, el análisis con 3 clusters puede ser más apropiado.
 
 # Conclusiones
-
-El desarrollo de un dashboard para la gestión de seguimiento de metas e indicadores en la comercialización de seguros ofrecerá a la entidad financiera una herramienta valiosa para optimizar su rendimiento comercial y adaptarse de manera ágil a un entorno dinámico. La implementación exitosa de este proyecto requerirá una comprensión profunda de las necesidades comerciales específicas y un enfoque integral en el diseño, implementación y mejora continua del dashboard.
-
-La implementación del dashboard para el seguimiento de metas e indicadores en la comercialización de seguros proporciona a la entidad financiera una herramienta poderosa para la toma de decisiones informada. La visualización clara y en tiempo real de los datos clave facilita la identificación de tendencias, la evaluación del rendimiento y la respuesta ágil a cambios en el entorno comercial.
-
-El dashboard contribuirá significativamente a mejorar la eficiencia operativa al proporcionar un acceso rápido y fácil a la información esencial.
-
-La capacidad de personalizar la visualización de datos permite a los usuarios adaptar el dashboard a sus necesidades específicas.
-
-La visualización clara de metas e indicadores ha facilitado la identificación temprana de oportunidades de crecimiento y desafíos potenciales.
+A continuación las principales conclusiones de la investigación:
+- En el análisis de datos faltantes, la mayoría de las variables en el conjunto de datos tienen pocos o ningún dato faltante.
+- Las variables con datos faltantes, como `PRIMA`, `CREDITO`, `diascred`, `edad`, `gedad`, y `diascob`, muestran que, aunque la cantidad de datos faltantes es pequeña.
+- Se identificaron correlaciones significativas entre algunas variables, especialmente entre `PRIMA` y `SALDO`, y entre `CREDITO` y `diascred`.
+- La variable `edad` no muestra una fuerte correlación con las demás variables.
+- Los primeros componentes principales capturan la mayor parte de la variabilidad en los datos, con los tres primeros componentes explicando aproximadamente el 78% de la variabilidad.
+- El análisis PCA ayudó a reducir la dimensionalidad del conjunto de datos.
+- La segmentación con k-means identificó 2 y 3 clusters distintos en el conjunto de datos.
+- El análisis con 3 clusters proporcionó una segmentación más detallada, mientras que el análisis con 2 clusters ofreció una clasificación más simplificada.
 
 # Recomendaciones
-
-Se recomienda la implementación de programas de capacitación continua para los usuarios del dashboard. Esto garantizará que estén al tanto de las funciones más recientes, optimizando así su capacidad para aprovechar todas las capacidades de la herramienta.
-
-A medida que evolucionan los objetivos comerciales y las estrategias, se recomienda la evaluación regular de la inclusión de nuevos indicadores relevantes en el dashboard. Esto garantizará que la herramienta siga siendo relevante y alineada con los objetivos comerciales cambiantes.
-
-Dada la naturaleza sensible de los datos comerciales, se recomienda una revisión continua de las medidas de seguridad implementadas para garantizar la protección y privacidad de la información.
-
-Establecer un sistema formal de retroalimentación de usuarios para recopilar comentarios y sugerencias. Esto permitirá realizar ajustes y mejoras en el dashboard en respuesta directa a las necesidades y experiencias de los usuarios.
+- Se debe explorar más a fondo las relaciones entre variables que muestran correlaciones significativas para entender mejor las dinámicas subyacentes, simplificar el modelo y evitar multicolinealidad.
+- Para modelo predictivos considerar el uso de las componentes principales en lugar de las variables originales.
+- Continuar explorando componentes adicionales si se busca capturar más de la variabilidad en el conjunto de datos.
+- Para ahondar en la segmentación, realizar una validación cruzada y ajustar los hiperparámetros del modelo de clustering para asegurar que la segmentación sea robusta y válida.
+Las recomendaciones basadas en estos hallazgos ayudarán a mejorar la toma de decisiones.
 
 # Referencias
 
-https://www.asfi.gob.bo/images/ASFI/DOCS/SALA_DE_PRENSA/Notas_de_prensa/2022/SEPARATA_BOLIVIA_2022.pdf 
