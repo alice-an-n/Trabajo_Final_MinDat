@@ -31,7 +31,7 @@ library(plotly)
 library(ggplot2)
 library(kableExtra)
 
-load("BDO_MUESTRA_10.RData")
+load(_data/"BDO_MUESTRA_10.RData")
 BD <- BDO_MUESTRA_10 %>% select_if(is.numeric)
 
 ```
