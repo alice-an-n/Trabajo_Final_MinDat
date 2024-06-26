@@ -1,30 +1,56 @@
 ---
-title: "Presentación"
+title: "Presentación Cartera de Creditos"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
     social: menu
     source: embed
+  runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(dplyr)
+library(haven)
+library(labelled)
+library(readxl)
+library(lubridate)
+library(mice)
+library(ExPanDaR)
+library(GGally)
+library(corrplot)
+library(ggplot2)
+library(explor)
+library(cluster) # medoides
+library(Kmedians) # medianas
+library(factoextra) # visual
+library(flexclust)
+library(dygraphs)
+library(shiny)
+library(plotly)
+library(ggplot2)
+library(kableExtra)
+
+load("BDO_MUESTRA_10.RData")
+BD <- BDO_MUESTRA_10 %>% select_if(is.numeric)
+
 ```
 
-### Leaflet is a JavaScript library for creating dynamic maps that support panning and zooming along with various annotations.
+### Análisis Descriptivo
 
 ```{r}
-library(leaflet)
-leaflet() %>%
-  addTiles() %>%
-  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
+
+fig <- plot_ly(BD, y= ~VALOR_ASEGURADO, type = "box", name = "Valor Asegurado") %>%
+       add_trace(y = ~MONTO_DESEMBOLSADO, name = "Monto Desembolsado") 
+
+fig
 ```
 
 ***
-
-https://rstudio.github.io/leaflet/
-
-- Interactive panning/zooming
+  
+  https://rstudio.github.io/leaflet/
+  
+  - Interactive panning/zooming
 
 - Compose maps using arbitrary combinations of map tiles, markers, polygons, lines, popups, and GeoJSON.
 
@@ -36,59 +62,86 @@ https://rstudio.github.io/leaflet/
 
 - Use map bounds and mouse events to drive Shiny logic
 
-
-### d3heatmap creates interactive D3 heatmaps including support for row/column highlighting and zooming.
+### MetricsGraphics enables easy creation of D3 scatterplots, line charts, and histograms.
 
 ```{r}
-library(d3heatmap)
-d3heatmap(mtcars, scale="column", colors="Blues")
+mcor <- BDO_MUESTRA_10 %>% select(where(is.numeric)) %>% cor()
+corrplot(mcor)
+
+# Calcular los eigenvalores y eigen vectores
+m1<-eigen(mcor)
+a1<-m1$vectors %*% diag(m1$values) %*% t(m1$vectors)
+
+m<-4
+a2<-m1$vectors[,1:m] %*% diag(m1$values)[1:m,1:m] %*% t(m1$vectors[,1:m])
+plot(1:length(m1$values),m1$values, type = "b")
+pesoL<-(m1$values/sum(m1$values))*100
+
 ```
 
 ***
 
-https://github.com/rstudio/d3heatmap/
-
-- Highlight rows/columns by clicking axis labels
-
-- Click and drag over colormap to zoom in (click on colormap to zoom out)
-
-- Optional clustering and dendrograms, courtesy of base::heatmap
-
-
-### Dygraphs provides rich facilities for charting time-series data in R and includes support for many interactive features.
+Correlaciones
 
 ```{r}
-library(dygraphs)
-lungDeaths <- cbind(mdeaths, fdeaths)
-dygraph(lungDeaths, main = "Deaths from Lung Diseases in the UK") %>%
-  dySeries("mdeaths", label = "Male") %>%
-  dySeries("fdeaths", label = "Female") %>%
-  dyOptions(stackedGraph = TRUE) %>%
-  dyRangeSelector(height = 20) %>% 
-  dyRangeSelector()
+kable(round(a2-mcor,5))
+```
+
+
+
+
+### Análisis de K-medias seleccionando variables
+
+
+
+```{r}
+
+palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
+  "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
+
+# Combine the selected variables into a new data frame
+selectedData <- reactive({
+  BDO_MUESTRA_10[, c(input$xcol, input$ycol)]
+})
+
+clusters <- reactive({
+  kmeans(selectedData(), input$clusters)
+})
+
+renderPlot({
+  par(mar = c(5.1, 4.1, 0, 1))
+  plot(selectedData(),
+       col = clusters()$cluster,
+       pch = 20, cex = 3)
+  points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+})
+
 ```
 
 ***
 
-https://rstudio.github.io/dygraphs/
-
-- Automatically plots xts time series objects (or any object convertible to xts).
-
-- Highly configurable axis and series display (including optional second Y-axis).
-
-- Rich interactive features including zoom/pan and series/point highlighting.
-
-- Display upper/lower bars (e.g. prediction intervals) around series.
-- Various graph overlays including shaded regions, event lines, and point annotations.
-
-
-### Plotly provides bindings to the plotly.js library and allows you to easily translate your ggplot2 graphics into an interactive web-based version.
+Selección de variables.
 
 ```{r}
-library(plotly)
-p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
-            geom_bar(position = "dodge")
-ggplotly(p)
+selectInput('xcol', 'X Variable', names(BD))
+
+selectInput('ycol', 'Y Variable', names(BD),
+                selected=names(BD)[[2]])
+    
+numericInput('clusters', 'Cluster count', 3,
+              min = 1, max = 9)
+```
+
+### Analisis k medias con componentes principales
+
+```{r}
+BD_num <- BDO_MUESTRA_10%>% select_if(is.numeric)
+BDOS<-scale(BD_num)
+set.seed(1245)#controlar la aleatoriedad
+n2<-kmeans(BDOS,2)# comando de origen
+gm <- fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal() 
+gm
+
 ```
 
 ***
@@ -100,19 +153,21 @@ If you use ggplot2, `ggplotly()` converts your plots to an interactive, web-base
 plotly supports some chart types that ggplot2 doesn't (such as 3D surface, point, and line plots). You can create these (or any other plotly) charts using `plot_ly()`.
 
 
-### MetricsGraphics enables easy creation of D3 scatterplots, line charts, and histograms.
+### Analisis k medias con componentes principales
 
 ```{r}
-library(metricsgraphics)
-mjs_plot(mtcars, x=wt, y=mpg) %>%
-  mjs_point(color_accessor=carb, size_accessor=carb) %>%
-  mjs_labs(x="Weight of Car", y="Miles per Gallon")
+m5<-princomp(BDO_MUESTRA_10 %>% select_if(is.numeric), cor = T)
+BDO_c<-BDO_MUESTRA_10 %>% bind_cols(data.frame(m5$scores))
+
+ggplot(BDO_c, aes(Comp.1,Comp.2, col=DESC_SUCURSAL)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
+  geom_hline(yintercept = 0,linetype="dotted")
 ```
 
 ***
+```{r}
 
-https://hrbrmstr.github.io/metricsgraphics/
+corrplot(
+  cor(BDO_c %>% select_if(is.numeric))
+)
+```
 
-Building metricsgraphics charts follows the “piping” idiom made popular through the magrittr, ggvis and dplyr packages. This makes it possible to avoid one giant function with a ton of parameters and facilitates breaking out the chart building into logical steps. 
-
-While MetricsGraphics.js charts may not have the flexibility of ggplot2, you can build functional, interactive [multi-]line, scatterplot, bar charts & histograms and + even link charts together.
