@@ -54,7 +54,7 @@ BD$VALOR_ASEGURADO <- as.numeric(gsub(",", "", BD$VALOR_ASEGURADO))
 BD$MONTO_DESEMBOLSADO <- as.numeric(gsub(",", "", BD$MONTO_DESEMBOLSADO))
 BD$diascob<-as.numeric(BD$diascob)
 BD$TASA_PRIMA_INTERES <- as.factor(cart$TASA_PRIMA_INTERES)
-BD$PRODUCTO <- factor(BD$PRODUCTO, levels = c("SEGUROS GENERALES", 
+BD$ï..PRODUCTO <- factor(BD$ï..PRODUCTO, levels = c("SEGUROS GENERALES", 
                                                   "SEGURO PERSONAS"))
 
 BD <- BD %>%
@@ -69,7 +69,7 @@ BD <- BD %>%
     CREDITO = MONTO_DESEMBOLSADO,
     NAC = NACIONALIDAD,
     TIPOCRED = OPERACION_CREDITICIA, 
-    SEGURO = ?..PRODUCTO,
+    SEGURO = ï..PRODUCTO,
     TASASEG = TASA_PRIMA_INTERES,
     TIPOID = TIPO_DOC_ID,
     SALDO = VALOR_ASEGURADO,
@@ -93,20 +93,20 @@ naprint(na.action(BDO))
 
 ######DATOS ATIPICOS
 ##################
-q1 <- quantile(BDO$MONTO_DESEMBOLSADO, 0.95)
-BDO_a <- which(BDO$MONTO_DESEMBOLSADO > q1)
+q1 <- quantile(BDO$SALDO, 0.95)
+BDO_a <- which(BDO$SALDO > q1)
 
-iqr <- IQR(BDO$MONTO_DESEMBOLSADO)
-up <- quantile(BDO$MONTO_DESEMBOLSADO, 0.95 )+ 1.5*iqr
-BDO_A <- subset(BDO, BDO$MONTO_DESEMBOLSADO < up)
+iqr <- IQR(BDO$SALDO)
+up <- quantile(BDO$SALDO, 0.95 )+ 1.5*iqr
+BDO_A <- subset(BDO, BDO$SALDO < up)
 
 
-q2 <- quantile(BDO_A$VALOR_ASEGURADO, 0.95)
-BDO_a <- which(BDO_A$VALOR_ASEGURADO > q2)
+q2 <- quantile(BDO_A$SALDO, 0.95)
+BDO_a <- which(BDO_A$SALDO > q2)
 
-iqr <- IQR(BDO_A$VALOR_ASEGURADO)
-up <- quantile(BDO_A$VALOR_ASEGURADO, 0.95)+ 1.5*iqr
-BDO_A <- subset(BDO_A, BDO_A$VALOR_ASEGURADO < up)
+iqr <- IQR(BDO_A$SALDO)
+up <- quantile(BDO_A$SALDO, 0.95)+ 1.5*iqr
+BDO_A <- subset(BDO_A, BDO_A$SALDO < up)
 
 boxplot(select(BDO_A, where(is.numeric)))
 ######################
@@ -119,7 +119,6 @@ var(BD[,],na.rm = T, use ="pairwise.complete.obs" )#pairwise
 str(BDO_A)
 ExPanD(BDO_A)
 ggpairs(BDO_A %>% select(SALDO, PRIMA))
-names(BDO_A)
 
 #muestreo
 BDO_MUESTRA<-BDO_A %>% sample_n(20000)#MAS
@@ -213,7 +212,7 @@ summary(n1)
 summary(n2)
 
 #########2 variables
-BD_num_2 <- BDO_A %>% select(VALOR_ASEGURADO,MONTO)
+BD_num_2 <- BDO_A %>% select(SALDO,PRIMA)
 BDOS<-scale(BD_num_2)
 set.seed(1245)#controlar la aleatoriedad
 n1<-kmeans(BDOS,3)# comando de origen
