@@ -31,8 +31,9 @@ library(plotly)
 library(ggplot2)
 library(kableExtra)
 
-load(_data/"BDO_MUESTRA_10.RData")
-BD <- BDO_MUESTRA_10 %>% select_if(is.numeric)
+load("Trabajo final/_data/BD.RData")
+load("Trabajo final/_data/BDO_A.RData")
+BD_num <- BDO_A %>% select_if(is.numeric)
 
 ```
 
@@ -159,7 +160,7 @@ plotly supports some chart types that ggplot2 doesn't (such as 3D surface, point
 m5<-princomp(BDO_MUESTRA_10 %>% select_if(is.numeric), cor = T)
 BDO_c<-BDO_MUESTRA_10 %>% bind_cols(data.frame(m5$scores))
 
-ggplot(BDO_c, aes(Comp.1,Comp.2, col=DESC_SUCURSAL)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
+ggplot(BDO_c, aes(Comp.1,Comp.2, col=PRODUCTO)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
   geom_hline(yintercept = 0,linetype="dotted")
 ```
 
