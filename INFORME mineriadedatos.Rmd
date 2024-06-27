@@ -22,6 +22,7 @@ library(dplyr)
 library(tidyverse)
 library(mice)
 library(corrplot)
+library(factoextra)
 
 load("_data/BDO_A.RData")
 load("_data/BD.RData")
@@ -29,12 +30,10 @@ load("_data/BD.RData")
 
 ```
 
-
-```{r, echo=FALSE, out.width='100%', fig.align='center'}
+```{r, echo=FALSE, fig.width=2, fig.height=1, fig.align='center'}
 include_graphics("_fig/logo_umsa2.png")
 
 ```
-
 
 \newpage
 
@@ -64,7 +63,7 @@ Al respecto, se observa un mercado potencial, por lo que los créditos son una f
 ## Objetivos Específicos
 - Relizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
 - Relizar el análisis de componentes a las variables numéricas.
-- Determinar el número óptimo de clusters para la base de datos.
+- Determinar el número óptimo de clusters para la base de datos acorde a la comparación del uso de todas las variables o de las más representativas en función ala análisisd de componentes.
 - Crear un dashboard que presente de manera clara y visual los clusters identificados.
 
 # Motivación
@@ -124,6 +123,9 @@ La gestión de metas e indicadores proporciona una visión integral del rendimie
 -	Desgloses Geográficos y Temporales: La capacidad de desglosar el rendimiento por región, sucursal o periodo temporal proporcionará insights valiosos para entender variaciones y patrones en la comercialización.
 -	Seguridad de Datos y Acceso: Se implementarán medidas de seguridad robustas para garantizar que solo los usuarios autorizados accedan a la información sensible.
 
+
+# Metodología
+
 # Descripción de la base datos
 
 La base de datos actual proviene de las transacciones de un mes del Banco PK respecto a ingresos no financieros (seguros). En la base de datos se cuenta con *42 variables* y 211k registros de evaluación respecto a datos del cliente, del seguro y operación crediticia. Se detalla a continuación las variables más relevantes para la construcción de los indicadores:
@@ -138,8 +140,16 @@ La base de datos actual proviene de las transacciones de un mes del Banco PK res
 - OPERACION_CREDITICIA: Es la razón o tipo operación crediticia donde el banco dio un prestamo a un cliente. 
 - ACT_EXO_OCUPACION: El tipo de actividad económica del cliente. 
 
-# Metodología
 
+## Análisis de Componentes Principales 
+
+El Análisis de Componentes Principales (ACP) es una técnica ampliamente utilizada en el análisis de datos multivariantes. Su objetivo es explorar conjuntos de datos multidimensionales con variables cuantitativas. El ACP proyecta las observaciones desde un espacio p-dimensional (con p variables) a un espacio k-dimensional (donde k < p), preservando la máxima información posible (medida por la varianza total del conjunto de datos) de las dimensiones originales.
+
+
+
+## Análisis de clusters K-medias
+
+El Análisis de Clústeres de K-medias es una técnica que busca identificar grupos de casos similares en función de las características seleccionadas. Utiliza un algoritmo que puede manejar grandes conjuntos de datos. Sin embargo, requiere que el usuario especifique el número de clústeres. Además, se pueden definir centros iniciales para los clústeres si se dispone de esa información previa. Existen dos métodos disponibles para clasificar los casos: actualización iterativa de los centros de los clústeres o simplemente la clasificación. Los resultados incluyen la pertenencia a los clústeres, información sobre la distancia y los centros finales. También es posible etiquetar los resultados por casos utilizando una variable específica. Además, se pueden solicitar estadísticos F para los análisis de varianza. Aunque estos estadísticos son oportunistas (ya que el procedimiento intenta formar grupos que realmente difieran), su tamaño relativo proporciona información sobre la contribución de cada variable a la separación de los grupos.
 
 
 
@@ -303,12 +313,15 @@ A continuación las principales conclusiones de la investigación:
 - El análisis PCA ayudó a reducir la dimensionalidad del conjunto de datos.
 - La segmentación con k-means identificó 2 y 3 clusters distintos en el conjunto de datos.
 - El análisis con 3 clusters proporcionó una segmentación más detallada, mientras que el análisis con 2 clusters ofreció una clasificación más simplificada.
+- Se rechaza la hipótesis,  pues esperábamos identificar patrones claros de comportamiento en la cartera de clientes, sin embargo, los resultados no mostraron agrupaciones claras en los datos. Por lo tanto, no podemos afirmar que el análisis de k-medias sea una herramienta efectiva para comprender el comportamiento de los clientes en este contexto específico.
 
 # Recomendaciones
 - Se debe explorar más a fondo las relaciones entre variables que muestran correlaciones significativas para entender mejor las dinámicas subyacentes, simplificar el modelo y evitar multicolinealidad.
 - Para modelo predictivos considerar el uso de las componentes principales en lugar de las variables originales.
 - Continuar explorando componentes adicionales si se busca capturar más de la variabilidad en el conjunto de datos.
 - Para ahondar en la segmentación, realizar una validación cruzada y ajustar los hiperparámetros del modelo de clustering para asegurar que la segmentación sea robusta y válida.
+- Recomendamos explorar otras técnicas de análisis y considerar factores adicionales para obtener una visión más completa.
+
 Las recomendaciones basadas en estos hallazgos ayudarán a mejorar la toma de decisiones.
 
 # Referencias
