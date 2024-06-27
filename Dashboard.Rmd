@@ -30,10 +30,14 @@ library(shiny)
 library(plotly)
 library(ggplot2)
 library(kableExtra)
+library(ggplot2)
+library(hrbrthemes)
 
-load("Trabajo final/_data/BD.RData")
-load("Trabajo final/_data/BDO_A.RData")
-BD_num <- BDO_A %>% select_if(is.numeric)
+load("_data/BD.RData")
+load("_data/BDO_MUESTRA.RData")
+load("_data/BDO_MUESTRA_10.RData")
+BD_num <- BDO_MUESTRA %>% select_if(is.numeric)
+BDO <- BDO_MUESTRA
 
 ```
 
@@ -41,32 +45,85 @@ BD_num <- BDO_A %>% select_if(is.numeric)
 
 ```{r}
 
-fig <- plot_ly(BD, y= ~VALOR_ASEGURADO, type = "box", name = "Valor Asegurado") %>%
-       add_trace(y = ~MONTO_DESEMBOLSADO, name = "Monto Desembolsado") 
+fig1 <- ggplot(BDO_MUESTRA_10, aes(x=VALOR_ASEGURADO, y=MONTO, size=PRODUCTO)) + 
+    geom_point(color="darkred") +
+    ggtitle("Size") +
+  theme_ipsum()
+fig1
 
-fig
+fig2 <- ggplot(BD, aes(x=as.factor(DESC_SUCURSAL), fill=as.factor(DESC_SUCURSAL) )) + 
+  geom_bar( ) +
+  scale_fill_hue(c = 40) +
+  theme(legend.position="none")
+fig2
+
+fig3 <- md.pattern(BD, plot = T)
+fig3
+```
+
+***
+
+*Hipótesis*
+
+H: El análisis k-means ayuda a entender mejor el patrón de comportamiento de de los clientes del Banco Patito S.A.
+
+H0: El análisis k-means no brinda herramientas para entender el patrón de comportamiento de los clientes del Banco Patito S.A.
+  
+**Objetivo General**
+  
+- Identificar los patrones de comportamientos mediante el análisis de k-medias de los clientes con créditos de seguros del Banco PK.
+
+**Objetivos Específicos**
+
+- Relizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
+- Relizar el análisis de componentes a las variables numéricas.
+- Determinar el número óptimo de clusters para la base de datos acorde a la comparación del uso de todas las variables o de las más representativas en función ala análisisd de componentes.
+- Crear un dashboard que presente de manera clara y visual los clusters identificados.
+
+
+### Análisis Descriptivo
+
+```{r}
+fig4 <- ggplot(BD, aes(x=as.factor(DESC_SUCURSAL), y = MONTO_DESEMBOLSADO, fill=as.factor(DESC_SUCURSAL) )) + 
+  geom_bar(stat = "identity" ) +
+  scale_fill_hue(c = 40) +
+  theme(legend.position="none")
+fig4
+
+fig5 <- ggplot(BD, aes(x=as.factor(PRODUCTO), y = MONTO_DESEMBOLSADO, fill=as.factor(PRODUCTO) )) + 
+  geom_bar(stat = "identity" ) +
+  scale_fill_hue(c = 40) +
+  theme(legend.position="none")
+fig5
+
+fig6 <- ggplot(BD, aes(x=as.factor(OPERACION_CREDITICIA), y = MONTO_DESEMBOLSADO, fill=as.factor(OPERACION_CREDITICIA) )) + 
+  geom_bar(stat = "identity" ) +
+  coord_flip() +
+  scale_fill_hue(c = 40) +
+  theme(legend.position="none")
+fig6
+  
 ```
 
 ***
   
-  https://rstudio.github.io/leaflet/
+*Conceptos clave*
   
-  - Interactive panning/zooming
+- *Crédito* es una operación financiera que permite a una persona acceder a una cantidad de dinero, hasta un límite especificado, durante un período de tiempo determinado.
 
-- Compose maps using arbitrary combinations of map tiles, markers, polygons, lines, popups, and GeoJSON.
+- *Seguro* es el instrumento a través del cual las empresas o personas transfieren riesgos a un tercero, empresa aseguradora, y en caso de siniestro tienen la obligación de indemnizar total o parcialmente sus pérdidas, dependiendo del contexto.
 
-- Create maps right from the R console or RStudio
+- *Prima* La prima es el precio del seguro que paga el tomador a la entidad aseguradora.
 
-- Embed maps in knitr/R Markdown documents and Shiny apps
+- *Siniestro* es un evento inesperado o dañino que está cubierto por la póliza de seguro.
 
-- Easily render Spatial objects from the sp package, or data frames with latitude/longitude columns
+- *Indemnización* es la compensación económica que la compañía aseguradora paga al asegurado en caso de sufrir un siniestro.
 
-- Use map bounds and mouse events to drive Shiny logic
 
-### MetricsGraphics enables easy creation of D3 scatterplots, line charts, and histograms.
+### Análisis de Componentes
 
 ```{r}
-mcor <- BDO_MUESTRA_10 %>% select(where(is.numeric)) %>% cor()
+mcor <- BDO %>% select(where(is.numeric)) %>% cor()
 corrplot(mcor)
 
 # Calcular los eigenvalores y eigen vectores
@@ -89,86 +146,91 @@ kable(round(a2-mcor,5))
 ```
 
 
-
-
-### Análisis de K-medias seleccionando variables
-
-
-
-```{r}
-
-palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-  "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-
-# Combine the selected variables into a new data frame
-selectedData <- reactive({
-  BDO_MUESTRA_10[, c(input$xcol, input$ycol)]
-})
-
-clusters <- reactive({
-  kmeans(selectedData(), input$clusters)
-})
-
-renderPlot({
-  par(mar = c(5.1, 4.1, 0, 1))
-  plot(selectedData(),
-       col = clusters()$cluster,
-       pch = 20, cex = 3)
-  points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-})
-
-```
-
-***
-
-Selección de variables.
-
-```{r}
-selectInput('xcol', 'X Variable', names(BD))
-
-selectInput('ycol', 'Y Variable', names(BD),
-                selected=names(BD)[[2]])
-    
-numericInput('clusters', 'Cluster count', 3,
-              min = 1, max = 9)
-```
-
-### Analisis k medias con componentes principales
-
-```{r}
-BD_num <- BDO_MUESTRA_10%>% select_if(is.numeric)
-BDOS<-scale(BD_num)
-set.seed(1245)#controlar la aleatoriedad
-n2<-kmeans(BDOS,2)# comando de origen
-gm <- fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal() 
-gm
-
-```
-
-***
-
-https://plot.ly/ggplot2/
-
-If you use ggplot2, `ggplotly()` converts your plots to an interactive, web-based version! It also provides sensible tooltips, which assists decoding of values encoded as visual properties in the plot.
-
-plotly supports some chart types that ggplot2 doesn't (such as 3D surface, point, and line plots). You can create these (or any other plotly) charts using `plot_ly()`.
-
-
-### Analisis k medias con componentes principales
+### Componentes principales y correlaciones
 
 ```{r}
 m5<-princomp(BDO_MUESTRA_10 %>% select_if(is.numeric), cor = T)
 BDO_c<-BDO_MUESTRA_10 %>% bind_cols(data.frame(m5$scores))
 
-ggplot(BDO_c, aes(Comp.1,Comp.2, col=PRODUCTO)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
-  geom_hline(yintercept = 0,linetype="dotted")
-```
-
-***
-```{r}
-
 corrplot(
   cor(BDO_c %>% select_if(is.numeric))
 )
+
+ggplot(BDO_c, aes(Comp.1,Comp.2, col=PRODUCTO)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
+  geom_hline(yintercept = 0,linetype="dotted")
+
 ```
 
+***
+El gráfico muestra los valores propios (eigenvalues) de la matriz de correlaciones en orden descendente. Este tipo de gráfico colabora a determinar el número de componentes principales a retener, por lo que se podría considerar aquellos valores superiores o iguales a 1, considerando los primeros tres componentes.
+
+Los valores propios (m1$values) y la proporción de varianza explicada por cada componente principal se presentan como sigue:
+
+Primer componente principal: Explica el 42.37% de la varianza total.
+Segundo componente principal: Explica el 19.10% de la varianza total.
+Tercer componente principal: Explica el 16.47% de la varianza total.
+Cuarto componente principal: Explica el 12.06% de la varianza total.
+Quinto componente principal: Explica el 6.21% de la varianza total.
+Sexto componente principal: Explica el 3.79% de la varianza total.
+
+
+### Analisis k medias con componentes principales
+
+```{r}
+BDOS<-scale(BD_num)
+set.seed(1245)#controlar la aleatoriedad
+n2<-kmeans(BDOS,2)# comando de origen
+gm2 <- fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal() 
+gm2
+
+
+n3<-kmeans(BDOS,3)# comando de origen
+gm3 <- fviz_cluster(n3, data=BDOS, geom= "point") + theme_minimal() 
+gm3
+
+
+BD_s <- data.frame(subset(BD, select = c(MONTO_DESEMBOLSADO, edad, PLAZO_CREDITO.DIAS.)))
+BD_s <- na.omit(BD_s)
+BDOS<-scale(BD_s)
+set.seed(1245)#controlar la aleatoriedad
+n4<-kmeans(BDOS,2)# comando de origen
+gm4 <- fviz_cluster(n4, data=BDOS, geom= "point") + theme_minimal() 
+gm4
+
+
+n5<-kmeans(BD_s,3)# comando de origen
+gm5 <- fviz_cluster(n5, data=BDOS, geom= "point") + theme_minimal() 
+gm5
+
+```
+
+***
+
+Comparación
+
+1.	El análisis con 3 clusters muestra una mayor segmentación, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
+2.	En el análisis con 3 clusters, hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
+3.	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
+4.	Para una segmentación de clientes más detallada, el análisis con 3 clusters puede ser más apropiado.
+
+### Conclusiones
+
+```{r}
+BDOS<-scale(BD_num)
+set.seed(1245)#controlar la aleatoriedad
+n2<-kmeans(BDOS,2)# comando de origen
+gm2 <- fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal() 
+gm2
+```
+
+***
+
+- En el análisis de datos faltantes, la mayoría de las variables en el conjunto de datos tienen pocos o ningún dato faltante.
+- Las variables con datos faltantes, como `PRIMA`, `CREDITO`, `diascred`, `edad`, `gedad`, y `diascob`, muestran que, aunque la cantidad de datos faltantes es pequeña.
+- Se identificaron correlaciones significativas entre algunas variables, especialmente entre `PRIMA` y `SALDO`, y entre `CREDITO` y `diascred`.
+- La variable `edad` no muestra una fuerte correlación con las demás variables.
+- Los primeros componentes principales capturan la mayor parte de la variabilidad en los datos, con los tres primeros componentes explicando aproximadamente el 78% de la variabilidad.
+- El análisis PCA ayudó a reducir la dimensionalidad del conjunto de datos.
+- La segmentación con k-means identificó 2 y 3 clusters distintos en el conjunto de datos.
+- El análisis con 3 clusters proporcionó una segmentación más detallada, mientras que el análisis con 2 clusters ofreció una clasificación más simplificada.
+- Se rechaza la hipótesis,  pues esperábamos identificar patrones claros de comportamiento en la cartera de clientes, sin embargo, los resultados no mostraron agrupaciones claras en los datos. Por lo tanto, no podemos afirmar que el análisis de k-medias sea una herramienta efectiva para comprender el comportamiento de los clientes en este contexto específico.
