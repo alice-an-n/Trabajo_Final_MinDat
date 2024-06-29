@@ -18,7 +18,7 @@ library(flexclust)
 
 ##CARGA DE LA DATA
 #csv
-cart<-read.csv("Trabajo final/CARTERA CREDITOS PERSONAS.csv", sep = ",")
+cart<-read.csv("Trabajo final/_data/CARTERA CREDITOS PERSONAS.csv", sep = ",")
 
 
 ##PREPARACI?N
@@ -54,7 +54,7 @@ BD$VALOR_ASEGURADO <- as.numeric(gsub(",", "", BD$VALOR_ASEGURADO))
 BD$MONTO_DESEMBOLSADO <- as.numeric(gsub(",", "", BD$MONTO_DESEMBOLSADO))
 BD$diascob<-as.numeric(BD$diascob)
 BD$TASA_PRIMA_INTERES <- as.factor(cart$TASA_PRIMA_INTERES)
-BD$ï..PRODUCTO <- factor(BD$ï..PRODUCTO, levels = c("SEGUROS GENERALES", 
+BD$PRODUCTO <- factor(BD$PRODUCTO, levels = c("SEGUROS GENERALES", 
                                                   "SEGURO PERSONAS"))
 
 BD <- BD %>%
@@ -69,12 +69,13 @@ BD <- BD %>%
     CREDITO = MONTO_DESEMBOLSADO,
     NAC = NACIONALIDAD,
     TIPOCRED = OPERACION_CREDITICIA, 
-    SEGURO = ï..PRODUCTO,
+    SEGURO = ?..PRODUCTO,
     TASASEG = TASA_PRIMA_INTERES,
     TIPOID = TIPO_DOC_ID,
     SALDO = VALOR_ASEGURADO,
     diascred = PLAZO_CREDITO.DIAS.
     )
+
 
 ##cantidad de datos 
 par(cex.axis = 0.7)
@@ -93,20 +94,20 @@ naprint(na.action(BDO))
 
 ######DATOS ATIPICOS
 ##################
-q1 <- quantile(BDO$SALDO, 0.95)
-BDO_a <- which(BDO$SALDO > q1)
+q1 <- quantile(BDO$MONTO_DESEMBOLSADO, 0.95)
+BDO_a <- which(BDO$MONTO_DESEMBOLSADO > q1)
 
-iqr <- IQR(BDO$SALDO)
-up <- quantile(BDO$SALDO, 0.95 )+ 1.5*iqr
-BDO_A <- subset(BDO, BDO$SALDO < up)
+iqr <- IQR(BDO$MONTO_DESEMBOLSADO)
+up <- quantile(BDO$MONTO_DESEMBOLSADO, 0.95 )+ 1.5*iqr
+BDO_A <- subset(BDO, BDO$MONTO_DESEMBOLSADO < up)
 
 
-q2 <- quantile(BDO_A$SALDO, 0.95)
-BDO_a <- which(BDO_A$SALDO > q2)
+q2 <- quantile(BDO_A$VALOR_ASEGURADO, 0.95)
+BDO_a <- which(BDO_A$VALOR_ASEGURADO > q2)
 
-iqr <- IQR(BDO_A$SALDO)
-up <- quantile(BDO_A$SALDO, 0.95)+ 1.5*iqr
-BDO_A <- subset(BDO_A, BDO_A$SALDO < up)
+iqr <- IQR(BDO_A$VALOR_ASEGURADO)
+up <- quantile(BDO_A$VALOR_ASEGURADO, 0.95)+ 1.5*iqr
+BDO_A <- subset(BDO_A, BDO_A$VALOR_ASEGURADO < up)
 
 boxplot(select(BDO_A, where(is.numeric)))
 ######################
@@ -119,9 +120,12 @@ var(BD[,],na.rm = T, use ="pairwise.complete.obs" )#pairwise
 str(BDO_A)
 ExPanD(BDO_A)
 ggpairs(BDO_A %>% select(SALDO, PRIMA))
+names(BDO_A)
 
 #muestreo
+set.seed(1245)
 BDO_MUESTRA<-BDO_A %>% sample_n(20000)#MAS
+BDO_MUESTRA_10 <- BDO_A %>% sample_n(10000)#MAS
 BDO_MUESTRA %>% summarise(mean(VALOR_ASEGURADO))
 BDO_A %>% summarise(mean(VALOR_ASEGURADO))
 ggplot(BDO_A,aes(VALOR_ASEGURADO))+geom_density()+ggtitle("DATOS COMPLETOS")
@@ -191,8 +195,26 @@ corrplot(
 #dashboard 
 explor(m5)
 
-ggplot(BDO_c, aes(Comp.1,Comp.2, col=SUCURSAL)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
+ggplot(BDO_c, aes(Comp.1,Comp.2, col=DESC_SUCURSAL)) + geom_point(alpha=0.5) + geom_vline(xintercept =  0,linetype="dotted") +
   geom_hline(yintercept = 0,linetype="dotted")
+
+
+###########3variables seleccionadas correlaciones
+m6<-princomp(BD_s %>% select_if(is.numeric), cor = T)
+summary(m6)
+plot(m6)
+m6$sdev
+m6$loadings
+m6$scores
+corrplot(cor(m6$scores))
+dim(m6$scores)
+BDO_c<-BD_s %>% bind_cols(data.frame(m6$scores))
+corrplot(
+  cor(BDO_c %>% select_if(is.numeric))
+)
+# EXPLOR
+#dashboard 
+explor(m6)
 
 
 #################CLUSTER K MEANS
@@ -212,7 +234,7 @@ summary(n1)
 summary(n2)
 
 #########2 variables
-BD_num_2 <- BDO_A %>% select(SALDO,PRIMA)
+BD_num_2 <- BDO_A %>% select(VALOR_ASEGURADO,MONTO)
 BDOS<-scale(BD_num_2)
 set.seed(1245)#controlar la aleatoriedad
 n1<-kmeans(BDOS,3)# comando de origen
@@ -228,7 +250,7 @@ fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 
 #####################
 ##### Muestra
-BD_num <- BDO_MUESTRA%>% select_if(is.numeric)
+BD_num <- BDO_MUESTRA_10%>% select_if(is.numeric)
 BDOS<-scale(BD_num)
 set.seed(1245)#controlar la aleatoriedad
 n2<-kmeans(BDOS,2)# comando de origen
