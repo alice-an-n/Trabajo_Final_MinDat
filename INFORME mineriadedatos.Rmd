@@ -92,19 +92,29 @@ Sin embargo, clusterizar, y muchas veces se confunde o no se ve la diferencia co
 Básicamente la diferencia es que en la segmentación sólo agrupas en función de criterios de negocio, los cuales, una vez dejan de ser relevantes para definir ese grupo, pueden hacer menos efectiva esa segmentación. Con un cluster, al utilizar criterios matemáticos, está constantemente actualizando los grupos, haciéndolos mucho más efectivos de cara a las posteriores acciones que desarrolles con ellos. Hoy día, este método es utilizado sobre todo en la informática, el marketing, el mundo empresarial y el artístico, y es tremendamente efectivo.
 
 Utilizar una segmentación a través de clusters, en una estrategia de fidelización e incentivación en cualquier marca, puede aportarte las siguientes ventajas:
+
 - Identificar patrones de comportamiento como, por ejemplo, qué compra, cuánto compra, cómo compra, qué factores influye en X situación, en qué momento consume o utiliza nuestro servicio, etc.
+
 - Conocer el perfil de cliente por patrones de consumo homogéneo: por niveles de gasto, CLV (Customer Time Value), localización, hábitos de compra, variables socio demográfico, edad, etc.
+
 - Crear y desarrollar campañas y promociones Ad-hoc y políticas comerciales acorde al comportamiento que reflejan los datos, mejorando la eficiencia de las mismas.
+
 - Priorizar clientes: focalizar acciones concretas de fidelización en clientes de mayor valor.
+
 - Captaciones de nuevos clientes (idénticos): desarrollar acciones de captación orientadas al target con las mismas características que el cluster.
+
 - Redirigir los flujos de clientes hacia clusters de mayor valor. Es una manera incluso de desarrollar técnicas de Up-selling.
+
 - Aumentar la retención: la predicción de clusters susceptibles al abandono permite desarrollar acciones enfocadas a reducir la tasa de abandono.
 
 ## Seguimiento de Ventas
 
 El seguimiento de ventas implica el monitoreo sistemático de todas las actividades relacionadas con el proceso de ventas de seguros. Desde la generación de leads hasta el cierre de negocios, cada etapa se analiza para evaluar el rendimiento y mejorar la eficacia de las estrategias de ventas.
+
 -	Optimización del Proceso: El seguimiento de ventas permite identificar cuellos de botella y optimizar cada etapa del proceso de ventas para mejorar la eficiencia y aumentar la productividad en la venta de seguros.
+
 -	Toma de Decisiones Basada en Datos: La recopilación y análisis de datos de ventas proporciona información valiosa para la toma de decisiones informada, lo que permite ajustar estrategias según sea necesario.
+
 -	Mejora Continua: Al comprender el rendimiento histórico, las organizaciones pueden implementar mejoras continuas en sus estrategias y tácticas de ventas.
 
 ## Concentración de Ingresos
@@ -160,13 +170,9 @@ La base de datos actual proviene de las transacciones de un mes del Banco PK res
 
 El Análisis de Componentes Principales (ACP) es una técnica ampliamente utilizada en el análisis de datos multivariantes. Su objetivo es explorar conjuntos de datos multidimensionales con variables cuantitativas. El ACP proyecta las observaciones desde un espacio p-dimensional (con p variables) a un espacio k-dimensional (donde k < p), preservando la máxima información posible (medida por la varianza total del conjunto de datos) de las dimensiones originales.
 
-
-
 ## Análisis de clusters K-medias
 
 El Análisis de Clústeres de K-medias es una técnica que busca identificar grupos de casos similares en función de las características seleccionadas. Utiliza un algoritmo que puede manejar grandes conjuntos de datos. Sin embargo, requiere que el usuario especifique el número de clústeres. Además, se pueden definir centros iniciales para los clústeres si se dispone de esa información previa. Existen dos métodos disponibles para clasificar los casos: actualización iterativa de los centros de los clústeres o simplemente la clasificación. Los resultados incluyen la pertenencia a los clústeres, información sobre la distancia y los centros finales. También es posible etiquetar los resultados por casos utilizando una variable específica. Además, se pueden solicitar estadísticos F para los análisis de varianza. Aunque estos estadísticos son oportunistas (ya que el procedimiento intenta formar grupos que realmente difieran), su tamaño relativo proporciona información sobre la contribución de cada variable a la separación de los grupos.
-
-
 
 ## Tratamiento sobre la base datos 
 
@@ -179,20 +185,16 @@ Por otro lado, respecto a los datos faltantes, se observo que son una cantidad m
 
 La base de datos de clientes de créditos y seguros cuenta con 211.494 observaciones y 42 variables por lo que se realizó la preparación con la transformación de variables inicialmente para la creación de nuevas variables como ser los días de cobertura del seguro (aplicando diferencia entre las fechas de inicio y fin de cobertura), asimismo, la edad se calculó a partir de la fecha de nacimiento y se realizó la conversión a variable numérica para proceder a aplicar la categorización por rangos de edades con la creación de una nueva
 
-
-##Selección de variables
+## Selección de variables
 
 Posterior se realizó la selección de 18 variables que son relevantes para la información de los clientes, siendo que se tiene información de transacciones o garantías que no son relevantes para el objeto del estudio. Sin embargo, se crea una nueva base de datos solo con 18 variables de las 45 que se tenía, con la transformación al tipo de variable que corresponde cada atributo de la base de datos, ya sea char, num o factor.
-
 
 ## Datos incompletos
 
  Se hizo la evaluación de la base de datos para identificar datos incompletos y realizar su tratamiento, por lo que se muestra la matriz de patrones de datos faltantes y la frecuencia de cada patrón.
- 
-```{r, echo=FALSE}
+ ```{r, echo=FALSE}
 md.pattern(BD, plot = T)
 ```
- 
 La primera columna de la tabla indica el número de filas que tienen un patrón específico de datos faltantes: 
 
 - 211357 filas no tienen datos faltantes en ninguna variable (1 indica que el dato está presente).
@@ -201,7 +203,6 @@ La primera columna de la tabla indica el número de filas que tienen un patrón 
 - 1 fila tiene otro patrón distinto de presencia y ausencia de datos.
 
 Las filas de la matriz indican si los datos están presentes (1) o faltan (0) para cada variable. La última fila indica cuántos valores faltantes hay para cada variable:
-
 - 135 valores faltan en la variable edad.
 - 135 valores faltan en la variable rango de edad.
 - 276 valores faltan en la variable días de cobertura.
@@ -209,11 +210,11 @@ Las filas de la matriz indican si los datos están presentes (1) o faltan (0) pa
 ```{r, echo=FALSE}
 kable(flux(BD))
 ```
-
 La proporción de valores presentes en cada variable, valores cercanos a 1 indican que casi todos los datos están presentes.
-+ influx: Proporción de valores faltantes para cada variable en relación con el total de valores faltantes.
-+ Variables como PRIMA, CREDITO, diascred, edad, gedad, y diascob tienen valores muy bajos de influx, indicando que los valores faltantes en estas variables constituyen una pequeña fracción del total.
-+ outflux: Proporción de datos presentes en una variable que coinciden con datos faltantes en otras variables. La mayoría de las variables tienen un outflux de 1, lo que indica que los datos presentes en estas variables coinciden con los datos presentes en otras variables.
+
+- influx: Proporción de valores faltantes para cada variable en relación con el total de valores faltantes.
+- Variables como PRIMA, CREDITO, diascred, edad, gedad, y diascob tienen valores muy bajos de influx, indicando que los valores faltantes en estas variables constituyen una pequeña fracción del total.
+- outflux: Proporción de datos presentes en una variable que coinciden con datos faltantes en otras variables. La mayoría de las variables tienen un outflux de 1, lo que indica que los datos presentes en estas variables coinciden con los datos presentes en otras variables.
 La mayoría de las variables tienen muy pocos o ningún valor faltante.
 Algunas variables, como edad y gedad, tienen un número ligeramente mayor de valores faltantes.
 El influx y outflux indican que los valores faltantes están dispersos entre las observaciones y no se concentran en una sola variable.
@@ -223,7 +224,6 @@ Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes
 ## Datos atípicos
 
 Estas son observaciones cuyos valores son muy diferentes a las otras observaciones del mismo grupo de datos. Los datos atípicos son ocasionados por:
-
 - Errores de procedimiento.
 - Acontecimientos extraordinarios.
 - Valores extremos. Por ejemplo, una muestra de datos del número de cigarrillos consumidos a diario contiene el valor 60 porque hay un fumador que fuma sesenta cigarrillos al día.
@@ -231,17 +231,14 @@ Estas son observaciones cuyos valores son muy diferentes a las otras observacion
 
 Por lo que se recomienda que se los identifique y tratarlos de manera adecuada, generalmente excluyéndolos del análisis porque distorsionan los resultados de los análisis.
  
- Es por ello que se recortó la base en un 5% para poder trabajar de mejor manera ya que los datos atípicos distorsionaban el análisis. Para ello se seleccionaron las variables 'Monto desembolsado' y 'valor asegurado' para su recorte.
+Es por ello que se recortó la base en un 5% para poder trabajar de mejor manera ya que los datos atípicos distorsionaban el análisis. Para ello se seleccionaron las variables 'Monto desembolsado' y 'valor asegurado' para su recorte.
 
 ```{r, echo=FALSE}
 boxplot(BD$VALOR_ASEGURADO, BD$MONTO_DESEMBOLSADO,
        names= c("Valor Asegurado", "Monto Desembolsado"))
 boxplot(BDO_A$VALOR_ASEGURADO, BDO_A$MONTO_DESEMBOLSADO,
        names= c("Valor Asegurado", "Monto Desembolsado"))
-
 ```
-
-
 ## Análisis de componentes principales
 
 Para identificar los principales componentes de la base de datos de clientes con créditos se realizó el análisis, con el gráfico de matriz de correlaciones visualizada mediante un "correlograma". Se muestra la relación entre las variables numéricas de la base de datos.
@@ -266,6 +263,7 @@ diascred: Tiene una fuerte correlación positiva con CREDITO.
 edad: Muestra correlaciones más débiles con las otras variables.
 diascob: Correlaciona fuertemente con diascred.
 Correlaciones Positivas Fuertes:
+
 - SALDO y PRIMA
 - SALDO y CREDITO
 - PRIMA y CREDITO
@@ -282,14 +280,15 @@ Se procedió al análisis de componentes principales PCA sobre la matriz de corr
 El gráfico muestra los valores propios (eigenvalues) de la matriz de correlaciones en orden descendente. Este tipo de gráfico colabora a determinar el número de componentes principales a retener, por lo que se podría considerar aquellos valores superiores o iguales a 1, considerando los primeros tres componentes.
 
 Los valores propios (m1$values) y la proporción de varianza explicada por cada componente principal se presentan como sigue:
+- Primer componente principal: Explica el 42.37% de la varianza total.
+- Segundo componente principal: Explica el 19.10% de la varianza total.
+- Tercer componente principal: Explica el 16.47% de la varianza total.
+- Cuarto componente principal: Explica el 12.06% de la varianza total.
+- Quinto componente principal: Explica el 6.21% de la varianza total.
+- Sexto componente principal: Explica el 3.79% de la varianza total.
 
-Primer componente principal: Explica el 42.37% de la varianza total.
-Segundo componente principal: Explica el 19.10% de la varianza total.
-Tercer componente principal: Explica el 16.47% de la varianza total.
-Cuarto componente principal: Explica el 12.06% de la varianza total.
-Quinto componente principal: Explica el 6.21% de la varianza total.
-Sexto componente principal: Explica el 3.79% de la varianza total.
 La varianza acumulada se calcula para determinar cuántos componentes principales son necesarios para explicar un cierto porcentaje de la varianza total:
+
 Primer componente principal: Explica el 42.37% de la varianza acumulada.
 Primeros dos componentes principales: Explican el 61.47% de la varianza acumulada.
 Primeros tres componentes principales: Explican el 77.94% de la varianza acumulada.
@@ -306,6 +305,8 @@ En el análisis de cluster por k-means se consideraron dos escenarios, donde en 
 
 Además según los resultados obtenidos en el análisis de componentes es que se realizará el análisis de k-means para 3 y 2 clusters, respectivamente.
 
+
+
 *Escenario 1- Todas las variables numéricas en 3 Clusters*
 
 ```{r, echo=FALSE}
@@ -315,13 +316,12 @@ set.seed(1245)#controlar la aleatoriedad
 n1<-kmeans(BDOS,3)# comando de origen
 fviz_cluster(n1, data=BDOS)
 ```
-
-1.	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 38.4% y 21.3% de la variabilidad total, respectivamente.
-2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión bastante amplia a lo largo de Dim1 y Dim2.
-3.	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico.
-4.	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
-5.	Se observa una cierta superposición entre los clusters 1 y 2, mientras que el Cluster 3 está más separado y bien definido.
-6.	El Cluster 1 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
+-	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 38.4% y 21.3% de la variabilidad total, respectivamente.
+-	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión bastante amplia a lo largo de Dim1 y Dim2.
+-	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico.
+-	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
+-	Se observa una cierta superposición entre los clusters 1 y 2, mientras que el Cluster 3 está más separado y bien definido.
+-	El Cluster 1 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
 
 *Escenario 1- Todas las variables numéricas en 2 Clusters*
 
@@ -333,11 +333,11 @@ n2<-kmeans(BDOS,2)# comando de origen
 fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 ```
 
-1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
-2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster abarca la mayor parte del gráfico, similar al Cluster 1 del análisis con 3 clusters.
-3.	Cluster 2 (Cian): Los puntos cian representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado y ubicado principalmente en la parte derecha del gráfico.
-4.	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 1 es más amplio, mientras que el Cluster 2 es más compacto.
-5.	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
+-	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
+-	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster abarca la mayor parte del gráfico, similar al Cluster 1 del análisis con 3 clusters.
+-	Cluster 2 (Cian): Los puntos cian representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado y ubicado principalmente en la parte derecha del gráfico.
+-	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 1 es más amplio, mientras que el Cluster 2 es más compacto.
+-	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
 
 *Escenario 2- Variables numéricas seleccionadas en 3 Clusters*
 
@@ -348,13 +348,12 @@ n3<-kmeans(BDOS,3)# comando de origen
 fviz_cluster(n3, data=BDOS, geom= "point") + theme_minimal()
 ```
 
-1.	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 59.7% y 32.8.3% de la variabilidad total, respectivamente.
-2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión más cercana a la Dim1.
-3.	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico Dim1.
-4.	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
-5.	Se observa que los clusters si bien están separados, estos no se encuentran definidos.
-6.	El Cluster 2 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
-
+-	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 59.7% y 32.8.3% de la variabilidad total, respectivamente.
+-	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión más cercana a la Dim1.
+-	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico Dim1.
+-	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
+-	Se observa que los clusters si bien están separados, estos no se encuentran definidos.
+-	El Cluster 2 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
 
 *Escenario 2- Variables numéricas seleccionadas en 2 Clusters*
 
@@ -365,25 +364,24 @@ n2<-kmeans(BDOS,2)# comando de origen
 fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 ```
 
-1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
-2.	Cluster 1 (Rojo): Este cluster está más concentrado y ubicado principalmente en la parte derecha de la Dim1.
-3.	Cluster 2 (Cian): Este cluster abarca la mayor parte del gráfico, donde se encuentra mayor dispersión de los datos y ubicación al lado izquierdo de la Dim1. 
-4.	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 2 es más amplio, mientras que el Cluster 1 es más compacto.
-5.	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
-
-
+-	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
+-	Cluster 1 (Rojo): Este cluster está más concentrado y ubicado principalmente en la parte derecha de la Dim1.
+-	Cluster 2 (Cian): Este cluster abarca la mayor parte del gráfico, donde se encuentra mayor dispersión de los datos y ubicación al lado izquierdo de la Dim1. 
+-	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 2 es más amplio, mientras que el Cluster 1 es más compacto.
+-	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
 
 Comparación 
 
-1.	El análisis con 3 clusters muestra una mayor segmentación en ambos escenarios, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
-2.	En el análisis con 3 clusters en ambos escenarios(pero con mayor énfasis en el primero), muestra que hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
-3.	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
-4.	Para una segmentación de clientes más detallada, el análisis con 3 clusters puede ser más apropiado.
-5. Se debe considerar que en ambos escenarios con 2 o 3 clusters se puede encontrar segmetación de grupos, pero visualemnte estos grupos se encuentran más dispersos.
+-	El análisis con 3 clusters muestra una mayor segmentación en ambos escenarios, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
+-	En el análisis con 3 clusters en ambos escenarios(pero con mayor énfasis en el primero), muestra que hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
+-	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
+-	Para una segmentación de clientes más detallada, el análisis con 3 clusters puede ser más apropiado.
+- Se debe considerar que en ambos escenarios con 2 o 3 clusters se puede encontrar segmetación de grupos, pero visualemnte estos grupos se encuentran más dispersos.
 
 # Conclusiones
 
 A continuación las principales conclusiones de la investigación:
+
 - En el análisis de datos faltantes, la mayoría de las variables en el conjunto de datos tienen pocos o ningún dato faltante.
 - Las variables con datos faltantes, como `PRIMA`, `CREDITO`, `diascred`, `edad`, `gedad`, y `diascob`, muestran que, aunque la cantidad de datos faltantes es pequeña.
 - Se identificaron correlaciones significativas entre algunas variables, especialmente entre `PRIMA` y `SALDO`, y entre `CREDITO` y `diascred`.
