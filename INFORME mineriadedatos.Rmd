@@ -59,9 +59,9 @@ Al respecto, se observa un mercado potencial, por lo que los créditos son una f
 
 ## Objetivos Específicos
 
-- Relizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
-- Relizar el análisis de componentes a las variables numéricas.
-- Determinar el número óptimo de clusters para la base de datos acorde a la comparación del uso de todas las variables o de las más representativas en función ala análisisd de componentes.
+- Realizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
+- Realizar el análisis de componentes a las variables numéricas.
+- Determinar el número óptimo de clusters para la base de datos acorde a la comparación del uso de todas las variables o de las más representativas en función al análisis de componentes.
 - Crear un dashboard que presente de manera clara y visual los clusters identificados.
 
 # Motivación
