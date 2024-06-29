@@ -9,6 +9,7 @@ output:
   html_document:
     toc: true
     number_sections: true  
+
 ---
 
 ```{r setup, include=FALSE}
@@ -26,14 +27,10 @@ library(factoextra)
 
 load("_data/BDO_A.RData")
 load("_data/BD.RData")
-
-
-```
-
-```{r, echo=FALSE, fig.width=2, fig.height=1, fig.align='center'}
-include_graphics("_fig/logo_umsa2.png")
+load("_data/BD_s.RData")
 
 ```
+
 
 \newpage
 
@@ -123,6 +120,19 @@ La gestión de metas e indicadores proporciona una visión integral del rendimie
 -	Desgloses Geográficos y Temporales: La capacidad de desglosar el rendimiento por región, sucursal o periodo temporal proporcionará insights valiosos para entender variaciones y patrones en la comercialización.
 -	Seguridad de Datos y Acceso: Se implementarán medidas de seguridad robustas para garantizar que solo los usuarios autorizados accedan a la información sensible.
 
+Importancia de selección de variables
+
+En el presente trabajo se seleccionarán variables según observaciones de su importancia en trabajos previos tales como : 
+El monto desembolsado es una variable crucial en el análisis de carteras de créditos, pues representa la cantidad de dinero prestada a los clientes. Su inclusión en el análisis de k-medias es fundamental, ya que los préstamos de diferentes montos pueden tener comportamientos de pago distintos. Además, el monto desembolsado puede estar relacionado con la capacidad de pago de los prestatarios. Por lo tanto, al agrupar clientes en segmentos según este atributo, podemos identificar patrones de riesgo y tomar decisiones informadas sobre la gestión de la cartera.
+
+La edad influye en comportamientos financieros como la capacidad de pago pueden Por ejemplo, los clientes jóvenes pueden tener una mayor aversión al riesgo y ser más propensos a cumplir con sus obligaciones. Por otro lado, los clientes mayores pueden tener una mayor estabilidad financiera pero también pueden enfrentar limitaciones debido a su jubilación.
+
+Al incluir la edad como variable en el análisis de k-medias, podemos explorar si existen grupos etarios con patrones de pago similares. Esto nos permitirá personalizar estrategias de gestión de riesgos y adaptar nuestras políticas de crédito según las necesidades de cada grupo.
+
+El plazo de pago del crédito en días es el período durante el cual se espera que los prestatarios reembolsen el préstamo. Es un indicador importante de la capacidad de pago y la disciplina financiera de los clientes. Los plazos más cortos pueden estar asociados con tasas de incumplimiento más bajas, ya que los clientes tienen menos tiempo para enfrentar dificultades financieras.
+
+Al considerar esta variable en el análisis de k-medias, podemos identificar grupos de clientes con diferentes perfiles de plazo de pago. Por ejemplo, podríamos encontrar un grupo de prestatarios que tienden a pagar antes de la fecha límite y otro grupo que necesita extensiones de plazo. Esta información nos ayudará a diseñar estrategias de cobranza más efectivas y a evaluar la salud general de la cartera de créditos.
+
 
 # Metodología
 
@@ -203,7 +213,32 @@ La mayoría de las variables tienen muy pocos o ningún valor faltante.
 Algunas variables, como edad y gedad, tienen un número ligeramente mayor de valores faltantes.
 El influx y outflux indican que los valores faltantes están dispersos entre las observaciones y no se concentran en una sola variable.
 El análisis sugiere que la base de datos es bastante completa, con algunas variables que tienen un pequeño número de valores faltantes. Los patrones de datos faltantes parecen ser dispersos, sin concentrarse en una sola variable, por lo que se aplicará el método listwise con variables que sean con datos completos.
-Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes (se observaron 137 casos 0.06%)
+Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes (se observaron 137 casos 0.06%).
+
+Datos atípicos
+
+Estas son observaciones cuyos valores son muy diferentes a las otras observaciones del mismo grupo de datos. Los datos atípicos son ocasionados por:
+
+-Errores de procedimiento.
+
+-Acontecimientos extraordinarios.
+
+-Valores extremos. Por ejemplo, una muestra de datos del número de cigarrillos consumidos a diario contiene el valor 60 porque hay un fumador que fuma sesenta cigarrillos al día.
+
+-Causas no conocidas.
+
+Por lo que se recomienda que se los identifique y tratarlos de manera adecuada, generalmente excluyéndolos del análisis porque distorsionan los resultados de los análisis.
+ 
+ Es por ello que se recortó la base en un 5% para poder trabajar de mejor manera ya que los datos atípicos distorsionaban el análisis. Para ello se seleccionaron las variables 'Monto desembolsado' y 'valor asegurado' para su recorte.
+
+```{r}
+boxplot(BD$VALOR_ASEGURADO, BD$MONTO_DESEMBOLSADO,
+       names= c("Valor Asegurado", "Monto Desembolsado"))
+boxplot(BDO_A$VALOR_ASEGURADO, BDO_A$MONTO_DESEMBOLSADO,
+       names= c("Valor Asegurado", "Monto Desembolsado"))
+
+```
+
 
 ## Análisis de componentes principales
 
@@ -236,7 +271,8 @@ Correlaciones Positivas Fuertes:
 - CREDITO y diascred
 - diascred y diascob
 
-Correlaciones Débiles o Inexistentes:
+### Correlaciones Débiles o Inexistentes:
+
 - Edad con otras variables muestra correlaciones débiles o casi inexistentes.
 La matriz de correlaciones nos indica que hay fuertes relaciones entre algunas de las variables financieras como SALDO, PRIMA, y CREDITO, así como entre CREDITO, diascred y diascob.
 Las correlaciones débiles de edad sugieren que la edad no tiene una relación fuerte con las demás variables en el conjunto de datos.
@@ -263,11 +299,13 @@ La decisión sobre cuántos componentes principales retener puede basarse en el 
 En este caso, los primeros tres componentes principales explican el 78.00% de la varianza acumulada, lo cual suele considerarse suficiente para la mayoría de los análisis.
 En el gráfico muestra un claro "codo" (punto de inflexión) después del primer componente principal, con una disminución más gradual en los valores propios después del tercer componente principal. Esto sugiere que los primeros tres componentes capturan la mayor parte de la información relevante en los datos.
 
-CLUSTER
+### CLUSTER
 
-Se presentan los resultados de los análisis de clustering k-means aplicados a las variables numéricas de la base de datos utilizando 3 y 2 clusters, respectivamente.
+En el análisis de cluster por k-means se consideraron dos escenarios, donde en el primero se trabajan con todas las variables numéricas 'valor asegurado', 'monto', 'monto desebolsado', 'pazo credito días', 'edad', 'dias cobrados'. En el segundo escenario se trabajan con variables seleccionadas en base a la teoría tales como 'monto desembolsado', 'plazo credito días' y ´edad'.
 
-Con 3 Clusters
+Además según los resultados obtenidos en el análisis de componentes es que se realizará el análisis de k-means para 3 y 2 clusters, respectivamente.
+
+*Escenario 1- Todas las variables numéricas en 3 Clusters*
 ```{r}
 BD_num <- BDO_A %>% select_if(is.numeric)
 BDOS<-scale(BD_num)
@@ -282,7 +320,7 @@ fviz_cluster(n1, data=BDOS)
 5.	Se observa una cierta superposición entre los clusters 1 y 2, mientras que el Cluster 3 está más separado y bien definido.
 6.	El Cluster 1 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
 
-Con 2 Clusters
+*Escenario 1- Todas las variables numéricas en 2 Clusters*
 
 ```{r}
 BD_num <- BDO_A %>% select_if(is.numeric)
@@ -297,11 +335,45 @@ fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 4.	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 1 es más amplio, mientras que el Cluster 2 es más compacto.
 5.	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
 
+*Escenario 2- Variables numéricas seleccionadas en 3 Clusters*
+
+```{r}
+BDOS<-scale(BD_s)
+set.seed(1245)#controlar la aleatoriedad
+n3<-kmeans(BDOS,3)# comando de origen
+fviz_cluster(n3, data=BDOS, geom= "point") + theme_minimal()
+```
+
+1.	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 59.7% y 32.8.3% de la variabilidad total, respectivamente.
+2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión más cercana a la Dim1.
+3.	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico Dim1.
+4.	Cluster 3 (Azul): Los puntos azules representan las observaciones asignadas al Cluster 3. Este cluster está más disperso en el área inferior derecha del gráfico.
+5.	Se observa que los clusters si bien están separados, estos no se encuentran definidos.
+6.	El Cluster 2 tiene una mayor dispersión, lo que indica una mayor variabilidad dentro de este grupo.
+
+
+*Escenario 2- Variables numéricas seleccionadas en 2 Clusters*
+
+```{r}
+BDOS<-scale(BD_s)
+set.seed(1245)#controlar la aleatoriedad
+n2<-kmeans(BDOS,2)# comando de origen
+fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
+```
+1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
+2.	Cluster 1 (Rojo): Este cluster está más concentrado y ubicado principalmente en la parte derecha de la Dim1.
+3.	Cluster 2 (Cian): Este cluster abarca la mayor parte del gráfico, donde se encuentra mayor dispersión de los datos y ubicación al lado izquierdo de la Dim1. 
+4.	Separación y Cohesión: La separación entre los dos clusters es más clara en comparación con el análisis de 3 clusters. El Cluster 2 es más amplio, mientras que el Cluster 1 es más compacto.
+5.	Distribución: La reducción de tres a dos clusters ha llevado a una fusión de los grupos, especialmente de los Clusters 2 y 3 del primer análisis en un solo Cluster 2 en este análisis.
+
+
+
 Comparación 
-1.	El análisis con 3 clusters muestra una mayor segmentación, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
-2.	En el análisis con 3 clusters, hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
+1.	El análisis con 3 clusters muestra una mayor segmentación en ambos escenarios, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
+2.	En el análisis con 3 clusters en ambos escenarios(pero con mayor énfasis en el primero), muestra que hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
 3.	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
 4.	Para una segmentación de clientes más detallada, el análisis con 3 clusters puede ser más apropiado.
+5. Se debe considerar que en ambos escenarios con 2 o 3 clusters se puede encontrar segmetación de grupos, pero visualemnte estos grupos se encuentran más dispersos.
 
 # Conclusiones
 A continuación las principales conclusiones de la investigación:
@@ -313,16 +385,15 @@ A continuación las principales conclusiones de la investigación:
 - El análisis PCA ayudó a reducir la dimensionalidad del conjunto de datos.
 - La segmentación con k-means identificó 2 y 3 clusters distintos en el conjunto de datos.
 - El análisis con 3 clusters proporcionó una segmentación más detallada, mientras que el análisis con 2 clusters ofreció una clasificación más simplificada.
-- Se rechaza la hipótesis,  pues esperábamos identificar patrones claros de comportamiento en la cartera de clientes, sin embargo, los resultados no mostraron agrupaciones claras en los datos. Por lo tanto, no podemos afirmar que el análisis de k-medias sea una herramienta efectiva para comprender el comportamiento de los clientes en este contexto específico.
+- Se rechaza la hipótesis, pues esperábamos identificar patrones claros de comportamiento en la cartera de clientes, sin embargo, los resultados no mostraron agrupaciones claras en los datos. Por lo tanto, no podemos afirmar que el análisis de k-medias sea una herramienta efectiva para comprender el comportamiento de los clientes en este contexto específico.
 
 # Recomendaciones
 - Se debe explorar más a fondo las relaciones entre variables que muestran correlaciones significativas para entender mejor las dinámicas subyacentes, simplificar el modelo y evitar multicolinealidad.
 - Para modelo predictivos considerar el uso de las componentes principales en lugar de las variables originales.
 - Continuar explorando componentes adicionales si se busca capturar más de la variabilidad en el conjunto de datos.
 - Para ahondar en la segmentación, realizar una validación cruzada y ajustar los hiperparámetros del modelo de clustering para asegurar que la segmentación sea robusta y válida.
-- Recomendamos explorar otras técnicas de análisis y considerar factores adicionales para obtener una visión más completa.
+- Recomendamos explorar otras técnicas de análisis y considerar factores adicionales para obtener una visión más completa. Podemos sugerir un análisis de regresión llineal por ejemplo.
 
 Las recomendaciones basadas en estos hallazgos ayudarán a mejorar la toma de decisiones.
 
 # Referencias
-
