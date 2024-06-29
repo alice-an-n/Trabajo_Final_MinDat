@@ -36,6 +36,8 @@ library(hrbrthemes)
 load("_data/BD.RData")
 load("_data/BDO_MUESTRA.RData")
 load("_data/BDO_MUESTRA_10.RData")
+load("_data/BD_s.RData")
+
 BD_num <- BDO_MUESTRA %>% select_if(is.numeric)
 BDO <- BDO_MUESTRA
 
@@ -189,8 +191,7 @@ gm3 <- fviz_cluster(n3, data=BDOS, geom= "point") + theme_minimal()
 gm3
 
 
-BD_s <- data.frame(subset(BD, select = c(MONTO_DESEMBOLSADO, edad, PLAZO_CREDITO.DIAS.)))
-BD_s <- na.omit(BD_s)
+
 BDOS<-scale(BD_s)
 set.seed(1245)#controlar la aleatoriedad
 n4<-kmeans(BDOS,2)# comando de origen
