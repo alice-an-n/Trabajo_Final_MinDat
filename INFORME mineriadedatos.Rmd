@@ -8,7 +8,7 @@ output:
     number_sections: true  
   html_document:
     toc: true
-    number_sections: true  
+    number_sections: true
 
 ---
 
@@ -37,11 +37,11 @@ load("_data/BD_s.RData")
 
 # Introducción
 
-El crédito es una operación financiera que permite a una persona acceder a una cantidad de dinero, hasta un límite especificado, durante un período de tiempo determinado. El crédito es una forma de financiación flexible que permite acceder al dinero prestado según las necesidades.
+El crédito es una operación financiera que permite a una persona acceder a una cantidad de dinero, hasta un límite especificado, durante un período de tiempo determinado. El crédito es una forma de financiación flexible que permite acceder al dinero prestado según las necesidades (Pérez López, Moya Fernández y Trigo Sierra, 2012).
 
 El seguro es el instrumento a través del cual las empresas o personas transfieren riesgos a un tercero, empresa aseguradora, y en caso de siniestro tienen la obligación de indemnizar total o parcialmente sus pérdidas, dependiendo del contexto.
 
-Las entidades aseguradoras otorgan cobertura a riesgos que podrían afectar a bienes, patrimonio o a individuos. Como contraprestación de ello requieren del pago de un monto (prima) y en el caso que suceda un determinado evento que ocasione una pérdida (siniestro) la aseguradora pagará el monto acordado (indemnización), cuyo riesgo de ocurrencia es objeto de cobertura por el seguro. La actividad del mercado inicia con la necesidad que se crea de los clientes a partir de la percepción de un riesgo y para el cual contrata la póliza de seguro de una compañía.
+Las entidades aseguradoras otorgan cobertura a riesgos que podrían afectar a bienes, patrimonio o a individuos. Como contraprestación de ello requieren del pago de un monto (prima) y en el caso que suceda un determinado evento que ocasione una pérdida (siniestro) la aseguradora pagará el monto acordado (indemnización), cuyo riesgo de ocurrencia es objeto de cobertura por el seguro. La actividad del mercado inicia con la necesidad que se crea de los clientes a partir de la percepción de un riesgo y para el cual contrata la póliza de seguro de una compañía (García Lomas, 2018)
 
 En entidades financieras al momento de otorgar un crédito se realiza la afiliación a diferentes seguros lo cual hace que exista un vinculo cercano entre el financiamiento y acceder a un seguro.
 
@@ -58,33 +58,37 @@ Al respecto, se observa un mercado potencial, por lo que los créditos son una f
 - Identificar los patrones de comportamientos mediante el análisis de k-medias de los clientes con créditos de seguros del Banco PK.
 
 ## Objetivos Específicos
+
 - Relizar la preparación de los datos para así contar con una base sin datos perdidos ni atípicos.
 - Relizar el análisis de componentes a las variables numéricas.
 - Determinar el número óptimo de clusters para la base de datos acorde a la comparación del uso de todas las variables o de las más representativas en función ala análisisd de componentes.
 - Crear un dashboard que presente de manera clara y visual los clusters identificados.
 
 # Motivación
+
 El Banco PK, al contar con una cantidad importante de clientes con canales de alto impacto, pretende conocer el comportamiento de los clientes para poder incrementar los ingresos por la comercialización de seguros. 
 
 Se advierte que el volumen de la cartera del Banco PK, créditos PYME, microcréditos, vivienda y consumo dirigido a personas naturales con cobertura del seguro, tuvo crecimiento en las gestiones 2017-2020 y una reducción al cierre de 2021 como resultado de la contracción económica debido a la pandemia, ya que en esta etapa se otorgó el diferimiento y reprogramación de créditos, pero para la gestión 2022 y 2023 se observa una recuperación de la cartera en riesgo con un crecimiento menor en valor absoluto de la gestión 2020.
 
-La cartera susceptible del seguro está conformada por créditos PYMES, Microcréditos, Hipotecarios, Productivos y de Consumo, los cuales de manera individual han tenido un crecimiento continuo, situación favorable para el desarrollo de nuevos productos de seguros adicionales tomando en cuenta el potencial de la cartera.
+La cartera susceptible del seguro está conformada por créditos PYMES, Microcréditos, Hipotecarios, Productivos y de Consumo, los cuales de manera individual han tenido un crecimiento continuo, situación favorable para el desarrollo de nuevos productos de seguros adicionales tomando en cuenta el potencial de la cartera (Parrales Ramos, 2013).
 
 Las personas naturales que tienen créditos representan un grupo susceptible para la venta de seguros. Cuando alguien adquiere un préstamo, su interés en proteger su inversión y su capacidad de pago aumenta. Por lo tanto, existe una oportunidad para ofrecerles productos de seguros que cubran riesgos como enfermedades, accidentes o pérdida de empleo.
 
 Además debemos considerar que la cartera de seguros ya está constituida, lo que significa que hay una base de clientes potenciales. A medida que aumenta la colocación de créditos, también se incrementa la demanda de seguros. Esto se debe a que las personas buscan proteger sus activos y garantizar la continuidad de sus compromisos financieros en caso de imprevistos.
 
-En el entorno actual, la gestión efectiva de metas e indicadores es fundamental para el éxito en la industria financiera y aseguradora. Identificar la clasificación de clientes para su gestión comercial es predominante con el objetivo de alcanzar las metas financieras, por lo que desarrollar un dashboard específico para la entidad financiera permitirá visualizar y analizar de manera eficiente los tipos de clientes relacionados con la comercialización de seguros. Esto facilitará la toma de decisiones informadas y la identificación de áreas de mejora.
+En el entorno actual, la gestión efectiva de metas e indicadores es fundamental para el éxito en la industria financiera y aseguradora. Identificar la clasificación de clientes para su gestión comercial es predominante con el objetivo de alcanzar las metas financieras, por lo que desarrollar un dashboard específico para la entidad financiera permitirá visualizar y analizar de manera eficiente los tipos de clientes relacionados con la comercialización de seguros. Esto facilitará la toma de decisiones informadas y la identificación de áreas de mejora (Bazan, 2015).
 
-Se ha observado que los clientes de seguros son variables cada mes por lo que se pretende mantener una tasa de crecimiento constante de acuerdo con las características de los tipos de clientes y a qué tipo de créditos aplican para evaluar en siguientes periodos los tipos de seguros a comercializar por canal, tipo de crédito y cliente. En ese sentido, se pretende generar un dashboard para otorgar la información oportunamente al área ejecutiva para la toma de decisiones entre el banco y aseguradora con acceso para los principales ejecutivos del área comercial.
+Se ha observado que los clientes de seguros son variables cada mes por lo que se pretende mantener una tasa de crecimiento constante de acuerdo con las características de los tipos de clientes y a qué tipo de créditos aplican para evaluar en siguientes periodos los tipos de seguros a comercializar por canal, tipo de crédito y cliente. En ese sentido, se pretende generar un dashboard para otorgar la información oportunamente al área ejecutiva para la toma de decisiones entre el banco y aseguradora con acceso para los principales ejecutivos del área comercial (Celi Yanangomez, 2023).
 
 # Marco Teórico
+
 La clasificación de clientes, a través del seguimiento de ventas y la concentración de ingresos son elementos cruciales para el éxito de cualquier organización comercial. Este marco teórico explora los fundamentos esenciales de estos conceptos y cómo su comprensión y aplicación pueden contribuir a una gestión empresarial efectiva.
 
-TECNICAS DE SEGMENTACIÓN Y CLUSTERING
-La segmentación de clientes consiste en un conjunto de acciones por medio de las cuales se seleccionan aspectos en común de la base de clientes y se los divide en diferentes grupos: cada uno de ellos es un segmento de clientes.
+## Técnicas y segmentación de clustering
 
-Sin embargo, clusterizar, y muchas veces se confunde o no se ve la diferencia con segmentación, es descubrir grupos de clientes similares, a través de variaciones similares dentro de cada grupo. Todo a través de modelos matemáticos.
+La segmentación de clientes consiste en un conjunto de acciones por medio de las cuales se seleccionan aspectos en común de la base de clientes y se los divide en diferentes grupos: cada uno de ellos es un segmento de clientes (Marín, 2006).
+
+Sin embargo, clusterizar, y muchas veces se confunde o no se ve la diferencia con segmentación, es descubrir grupos de clientes similares, a través de variaciones similares dentro de cada grupo. Todo a través de modelos matemáticos (Celi Yanangomez, 2023).
 Básicamente la diferencia es que en la segmentación sólo agrupas en función de criterios de negocio, los cuales, una vez dejan de ser relevantes para definir ese grupo, pueden hacer menos efectiva esa segmentación. Con un cluster, al utilizar criterios matemáticos, está constantemente actualizando los grupos, haciéndolos mucho más efectivos de cara a las posteriores acciones que desarrolles con ellos. Hoy día, este método es utilizado sobre todo en la informática, el marketing, el mundo empresarial y el artístico, y es tremendamente efectivo.
 
 Utilizar una segmentación a través de clusters, en una estrategia de fidelización e incentivación en cualquier marca, puede aportarte las siguientes ventajas:
@@ -96,22 +100,22 @@ Utilizar una segmentación a través de clusters, en una estrategia de fidelizac
 - Redirigir los flujos de clientes hacia clusters de mayor valor. Es una manera incluso de desarrollar técnicas de Up-selling.
 - Aumentar la retención: la predicción de clusters susceptibles al abandono permite desarrollar acciones enfocadas a reducir la tasa de abandono.
 
-Seguimiento de Ventas
+## Seguimiento de Ventas
 
 El seguimiento de ventas implica el monitoreo sistemático de todas las actividades relacionadas con el proceso de ventas de seguros. Desde la generación de leads hasta el cierre de negocios, cada etapa se analiza para evaluar el rendimiento y mejorar la eficacia de las estrategias de ventas.
 -	Optimización del Proceso: El seguimiento de ventas permite identificar cuellos de botella y optimizar cada etapa del proceso de ventas para mejorar la eficiencia y aumentar la productividad en la venta de seguros.
 -	Toma de Decisiones Basada en Datos: La recopilación y análisis de datos de ventas proporciona información valiosa para la toma de decisiones informada, lo que permite ajustar estrategias según sea necesario.
 -	Mejora Continua: Al comprender el rendimiento histórico, las organizaciones pueden implementar mejoras continuas en sus estrategias y tácticas de ventas.
 
-Concentración de Ingresos
+## Concentración de Ingresos
 
-La concentración de ingresos se refiere al grado en que los ingresos del Banco dependen de un pequeño número de clientes, productos o segmentos de mercado. Una alta concentración puede ser riesgosa, ya que la pérdida de un cliente clave podría tener un impacto significativo en los ingresos totales.
+La concentración de ingresos se refiere al grado en que los ingresos del Banco dependen de un pequeño número de clientes, productos o segmentos de mercado. Una alta concentración puede ser riesgosa, ya que la pérdida de un cliente clave podría tener un impacto significativo en los ingresos totales (Borja Tacuri, 2019).
 
 -	Diversificación de Clientes: Entender y gestionar la concentración de ingresos motiva a las empresas a diversificar su base de clientes, reduciendo la dependencia de fuentes únicas.
 -	Gestión de Riesgos: La concentración de ingresos puede aumentar la vulnerabilidad ante cambios en el mercado. La gestión proactiva de riesgos es esencial para mitigar posibles impactos adversos.
 -	Planificación Estratégica: Comprender la concentración de ingresos influye en la planificación estratégica. Las organizaciones pueden desarrollar estrategias para reducir riesgos y aprovechar oportunidades de crecimiento.
 
-Importancia de la Gestión de Metas e Indicadores
+## Importancia de la Gestión de Metas e Indicadores
 
 La gestión de metas e indicadores proporciona una visión integral del rendimiento empresarial. Al establecer y monitorear metas específicas, la entidad financiera puede evaluar su éxito en la comercialización de seguros y ajustar estrategias según sea necesario.
 
@@ -120,23 +124,24 @@ La gestión de metas e indicadores proporciona una visión integral del rendimie
 -	Desgloses Geográficos y Temporales: La capacidad de desglosar el rendimiento por región, sucursal o periodo temporal proporcionará insights valiosos para entender variaciones y patrones en la comercialización.
 -	Seguridad de Datos y Acceso: Se implementarán medidas de seguridad robustas para garantizar que solo los usuarios autorizados accedan a la información sensible.
 
-Importancia de selección de variables
+## Importancia de selección de variables
 
-En el presente trabajo se seleccionarán variables según observaciones de su importancia en trabajos previos tales como : 
-El monto desembolsado es una variable crucial en el análisis de carteras de créditos, pues representa la cantidad de dinero prestada a los clientes. Su inclusión en el análisis de k-medias es fundamental, ya que los préstamos de diferentes montos pueden tener comportamientos de pago distintos. Además, el monto desembolsado puede estar relacionado con la capacidad de pago de los prestatarios. Por lo tanto, al agrupar clientes en segmentos según este atributo, podemos identificar patrones de riesgo y tomar decisiones informadas sobre la gestión de la cartera.
+En el presente trabajo se seleccionarán variables según observaciones de su importancia en trabajos previos tales como : Marín (2006), Parrales Ramos (2013), Pérez López, Moya Fernández y Trigo Sierra (2012), Vergara-Romero (2011) y Bazan (2015).
+
+El monto desembolsado es una variable crucial en el análisis de carteras de créditos, pues representa la cantidad de dinero prestada a los clientes. Su inclusión en el análisis de k-medias es fundamental, ya que los préstamos de diferentes montos pueden tener comportamientos de pago distintos. Además, el monto desembolsado puede estar relacionado con la capacidad de pago de los prestatarios. Por lo tanto, al agrupar clientes en segmentos según este atributo, podemos identificar patrones de riesgo y tomar decisiones informadas sobre la gestión de la cartera (Vergara-Romero, 2011).
 
 La edad influye en comportamientos financieros como la capacidad de pago pueden Por ejemplo, los clientes jóvenes pueden tener una mayor aversión al riesgo y ser más propensos a cumplir con sus obligaciones. Por otro lado, los clientes mayores pueden tener una mayor estabilidad financiera pero también pueden enfrentar limitaciones debido a su jubilación.
 
 Al incluir la edad como variable en el análisis de k-medias, podemos explorar si existen grupos etarios con patrones de pago similares. Esto nos permitirá personalizar estrategias de gestión de riesgos y adaptar nuestras políticas de crédito según las necesidades de cada grupo.
 
-El plazo de pago del crédito en días es el período durante el cual se espera que los prestatarios reembolsen el préstamo. Es un indicador importante de la capacidad de pago y la disciplina financiera de los clientes. Los plazos más cortos pueden estar asociados con tasas de incumplimiento más bajas, ya que los clientes tienen menos tiempo para enfrentar dificultades financieras.
+El plazo de pago del crédito en días es el período durante el cual se espera que los prestatarios reembolsen el préstamo. Es un indicador importante de la capacidad de pago y la disciplina financiera de los clientes. Los plazos más cortos pueden estar asociados con tasas de incumplimiento más bajas, ya que los clientes tienen menos tiempo para enfrentar dificultades financieras (Borja Tacuri, 2019).
 
 Al considerar esta variable en el análisis de k-medias, podemos identificar grupos de clientes con diferentes perfiles de plazo de pago. Por ejemplo, podríamos encontrar un grupo de prestatarios que tienden a pagar antes de la fecha límite y otro grupo que necesita extensiones de plazo. Esta información nos ayudará a diseñar estrategias de cobranza más efectivas y a evaluar la salud general de la cartera de créditos.
 
 
 # Metodología
 
-# Descripción de la base datos
+## Descripción de la base datos
 
 La base de datos actual proviene de las transacciones de un mes del Banco PK respecto a ingresos no financieros (seguros). En la base de datos se cuenta con *42 variables* y 211k registros de evaluación respecto a datos del cliente, del seguro y operación crediticia. Se detalla a continuación las variables más relevantes para la construcción de los indicadores:
 
@@ -164,6 +169,7 @@ El Análisis de Clústeres de K-medias es una técnica que busca identificar gru
 
 
 ## Tratamiento sobre la base datos 
+
 Para el presente conjunto de datos se cuido que las diferentes variables correpondan a un tipo de dato diferente según su naturaleza, como ser variables categóricas, numericas y otras.
 Por otro lado, respecto a los datos faltantes, se observo que son una cantidad muy pequeña respecto del total, asi se decidio omitirlas. Posteriormente, el tratamiento de las diferentes variables se vio directamente para la construcción de cada indicador, y previamente creando algunas variables como la región en base al departamento de origen de la transacción o la edad de los clientes en base a su fecha de nacimiento. 
 
@@ -183,9 +189,7 @@ Posterior se realizó la selección de 18 variables que son relevantes para la i
 
  Se hizo la evaluación de la base de datos para identificar datos incompletos y realizar su tratamiento, por lo que se muestra la matriz de patrones de datos faltantes y la frecuencia de cada patrón.
  
- variable.
-
-```{r}
+```{r, echo=FALSE}
 md.pattern(BD, plot = T)
 ```
  
@@ -197,11 +201,12 @@ La primera columna de la tabla indica el número de filas que tienen un patrón 
 - 1 fila tiene otro patrón distinto de presencia y ausencia de datos.
 
 Las filas de la matriz indican si los datos están presentes (1) o faltan (0) para cada variable. La última fila indica cuántos valores faltantes hay para cada variable:
+
 - 135 valores faltan en la variable edad.
 - 135 valores faltan en la variable rango de edad.
 - 276 valores faltan en la variable días de cobertura.
 
-```{r}
+```{r, echo=FALSE}
 kable(flux(BD))
 ```
 
@@ -215,23 +220,20 @@ El influx y outflux indican que los valores faltantes están dispersos entre las
 El análisis sugiere que la base de datos es bastante completa, con algunas variables que tienen un pequeño número de valores faltantes. Los patrones de datos faltantes parecen ser dispersos, sin concentrarse en una sola variable, por lo que se aplicará el método listwise con variables que sean con datos completos.
 Por lo que se genera una nueva base de datos con 211.357 de los 211.494 clientes (se observaron 137 casos 0.06%).
 
-Datos atípicos
+## Datos atípicos
 
 Estas son observaciones cuyos valores son muy diferentes a las otras observaciones del mismo grupo de datos. Los datos atípicos son ocasionados por:
 
--Errores de procedimiento.
-
--Acontecimientos extraordinarios.
-
--Valores extremos. Por ejemplo, una muestra de datos del número de cigarrillos consumidos a diario contiene el valor 60 porque hay un fumador que fuma sesenta cigarrillos al día.
-
--Causas no conocidas.
+- Errores de procedimiento.
+- Acontecimientos extraordinarios.
+- Valores extremos. Por ejemplo, una muestra de datos del número de cigarrillos consumidos a diario contiene el valor 60 porque hay un fumador que fuma sesenta cigarrillos al día.
+- Causas no conocidas.
 
 Por lo que se recomienda que se los identifique y tratarlos de manera adecuada, generalmente excluyéndolos del análisis porque distorsionan los resultados de los análisis.
  
  Es por ello que se recortó la base en un 5% para poder trabajar de mejor manera ya que los datos atípicos distorsionaban el análisis. Para ello se seleccionaron las variables 'Monto desembolsado' y 'valor asegurado' para su recorte.
 
-```{r}
+```{r, echo=FALSE}
 boxplot(BD$VALOR_ASEGURADO, BD$MONTO_DESEMBOLSADO,
        names= c("Valor Asegurado", "Monto Desembolsado"))
 boxplot(BDO_A$VALOR_ASEGURADO, BDO_A$MONTO_DESEMBOLSADO,
@@ -244,11 +246,10 @@ boxplot(BDO_A$VALOR_ASEGURADO, BDO_A$MONTO_DESEMBOLSADO,
 
 Para identificar los principales componentes de la base de datos de clientes con créditos se realizó el análisis, con el gráfico de matriz de correlaciones visualizada mediante un "correlograma". Se muestra la relación entre las variables numéricas de la base de datos.
 
-```{r}
+```{r, echo=FALSE}
 mcor <- BDO_A %>% select(where(is.numeric)) %>% cor()
 corrplot(mcor)
 ```
-
 
 Las variables numéricas consideradas en la matriz de correlación son: SALDO, PRIMA, CREDITO, diascred, edad, y diascob. 
 El color de las celdas varía desde el azul oscuro (correlación positiva alta) hasta el rojo oscuro (correlación negativa alta).
@@ -299,20 +300,22 @@ La decisión sobre cuántos componentes principales retener puede basarse en el 
 En este caso, los primeros tres componentes principales explican el 78.00% de la varianza acumulada, lo cual suele considerarse suficiente para la mayoría de los análisis.
 En el gráfico muestra un claro "codo" (punto de inflexión) después del primer componente principal, con una disminución más gradual en los valores propios después del tercer componente principal. Esto sugiere que los primeros tres componentes capturan la mayor parte de la información relevante en los datos.
 
-### CLUSTER
+## CLUSTER
 
 En el análisis de cluster por k-means se consideraron dos escenarios, donde en el primero se trabajan con todas las variables numéricas 'valor asegurado', 'monto', 'monto desebolsado', 'pazo credito días', 'edad', 'dias cobrados'. En el segundo escenario se trabajan con variables seleccionadas en base a la teoría tales como 'monto desembolsado', 'plazo credito días' y ´edad'.
 
 Además según los resultados obtenidos en el análisis de componentes es que se realizará el análisis de k-means para 3 y 2 clusters, respectivamente.
 
 *Escenario 1- Todas las variables numéricas en 3 Clusters*
-```{r}
+
+```{r, echo=FALSE}
 BD_num <- BDO_A %>% select_if(is.numeric)
 BDOS<-scale(BD_num)
 set.seed(1245)#controlar la aleatoriedad
 n1<-kmeans(BDOS,3)# comando de origen
 fviz_cluster(n1, data=BDOS)
 ```
+
 1.	El gráfico muestra las dos primeras componentes principales (Dim1 y Dim2) que explican el 38.4% y 21.3% de la variabilidad total, respectivamente.
 2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster tiene una extensión bastante amplia a lo largo de Dim1 y Dim2.
 3.	Cluster 2 (Verde): Los puntos verdes representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado en el lado derecho del gráfico.
@@ -322,13 +325,14 @@ fviz_cluster(n1, data=BDOS)
 
 *Escenario 1- Todas las variables numéricas en 2 Clusters*
 
-```{r}
+```{r, echo=FALSE}
 BD_num <- BDO_A %>% select_if(is.numeric)
 BDOS<-scale(BD_num)
 set.seed(1245)#controlar la aleatoriedad
 n2<-kmeans(BDOS,2)# comando de origen
 fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 ```
+
 1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
 2.	Cluster 1 (Rojo): Los puntos rojos representan las observaciones asignadas al Cluster 1. Este cluster abarca la mayor parte del gráfico, similar al Cluster 1 del análisis con 3 clusters.
 3.	Cluster 2 (Cian): Los puntos cian representan las observaciones asignadas al Cluster 2. Este cluster está más concentrado y ubicado principalmente en la parte derecha del gráfico.
@@ -337,7 +341,7 @@ fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 
 *Escenario 2- Variables numéricas seleccionadas en 3 Clusters*
 
-```{r}
+```{r, echo=FALSE}
 BDOS<-scale(BD_s)
 set.seed(1245)#controlar la aleatoriedad
 n3<-kmeans(BDOS,3)# comando de origen
@@ -354,12 +358,13 @@ fviz_cluster(n3, data=BDOS, geom= "point") + theme_minimal()
 
 *Escenario 2- Variables numéricas seleccionadas en 2 Clusters*
 
-```{r}
+```{r, echo=FALSE}
 BDOS<-scale(BD_s)
 set.seed(1245)#controlar la aleatoriedad
 n2<-kmeans(BDOS,2)# comando de origen
 fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 ```
+
 1.	Similar al gráfico anterior, muestra las dos primeras componentes principales con las mismas proporciones de variabilidad.
 2.	Cluster 1 (Rojo): Este cluster está más concentrado y ubicado principalmente en la parte derecha de la Dim1.
 3.	Cluster 2 (Cian): Este cluster abarca la mayor parte del gráfico, donde se encuentra mayor dispersión de los datos y ubicación al lado izquierdo de la Dim1. 
@@ -369,6 +374,7 @@ fviz_cluster(n2, data=BDOS, geom= "point") + theme_minimal()
 
 
 Comparación 
+
 1.	El análisis con 3 clusters muestra una mayor segmentación en ambos escenarios, lo que puede ser útil si se busca una diferenciación más detallada dentro de los datos.
 2.	En el análisis con 3 clusters en ambos escenarios(pero con mayor énfasis en el primero), muestra que hay cierta superposición entre los clusters, especialmente entre los Clusters 1 y 2.
 3.	En el análisis con 2 clusters, la separación entre los clusters es más clara, lo que puede facilitar la interpretación y la toma de decisiones basadas en estos grupos.
@@ -376,6 +382,7 @@ Comparación
 5. Se debe considerar que en ambos escenarios con 2 o 3 clusters se puede encontrar segmetación de grupos, pero visualemnte estos grupos se encuentran más dispersos.
 
 # Conclusiones
+
 A continuación las principales conclusiones de la investigación:
 - En el análisis de datos faltantes, la mayoría de las variables en el conjunto de datos tienen pocos o ningún dato faltante.
 - Las variables con datos faltantes, como `PRIMA`, `CREDITO`, `diascred`, `edad`, `gedad`, y `diascob`, muestran que, aunque la cantidad de datos faltantes es pequeña.
@@ -397,3 +404,12 @@ A continuación las principales conclusiones de la investigación:
 Las recomendaciones basadas en estos hallazgos ayudarán a mejorar la toma de decisiones.
 
 # Referencias
+
+* Bazan, F. (2015). Aplicación de la técnica estadística clúster k-medias para la segmentación orientada a comprender las necesidades de financiamiento de clientes de una entidad financiera. (Tesis de doctorado). UNIVERSIDAD NACIONAL DE INGENIERÍA.
+* Borja Tacuri, M. A. (2019). Factores de morosidad en la cartera de créditos en Caja Arequipa agencia El Tambo. Universidad Continental.
+* Celi Yanangomez, G. M. (2023). Diseño de una estrategia de recuperación crediticia temprana para clientes Pequeñas Empresas de una institución financiera del Ecuador mediante los algoritmos k-medias y bosques aleatorios. (Tesis de licenciatura). Quito: EPN.
+* García Lomas, V. A. (2018). Análisis de la cartera de créditos de la banca pública ecuatoriana (2008-2017). Revista científica UISRAEL, 5(3), 37-50. Universidad Tecnológica Israel.
+* Marín, Z. I. C. (2006). La diversificación del riesgo en la cartera de créditos del sector financiero con base en la teoría de portafolios. Universidad EAFIT.
+* Parrales Ramos, C. (2013). Análisis del índice de morosidad en la cartera de créditos del IECE-Guayaquil y propuesta de mecanismos de prevención de morosidad y técnicas eficientes de cobranzas. (Tesis de maestría).
+* Pérez López, Á., Moya Fernández, A. J., & Trigo Sierra, E. (2012). Cuestiones prácticas de las ventas de carteras de créditos. Actualidad Jurídica, 33(3), 45-62. Dykinson.
+* Vergara-Romero, A. (2011). Análisis de las carteras de créditos orientados a la Microempresa de los Bancos Privados del Ecuador 2009-2010 (Analysis of the Credit Portfolios Oriented to Microenterprises of the Private Banks of Ecuador 2009-2010). Repositorio Universidad de Guayaquil 2021.
